@@ -1,0 +1,21 @@
+<ng-container *ngIf="!isLoading">
+    <div
+        class="customer-list-header"
+        style="display: flex; justify-content: space-between; align-items: center"
+    >
+        <div class="customer-list-header-title">
+            <h2>Empréstimos</h2>
+        </div>
+    </div>
+
+    <app-listing
+        [listingData]="listingData"
+        [listingOptions]="listingOptions"
+        [isLoading]="isLoading"
+        [itemsPerPage]="itemsPerPage"
+        [currentPage]="currentPage"
+        (changePage)="onPageChange($event)"
+        (sort)="onSortChange($event)"
+    >
+    </app-listing>
+</ng-container>

@@ -1,0 +1,122 @@
+<ng-container *ngIf="!isLoading">
+    <p-card>
+        <ng-template #title>
+            <h2>Empréstimo</h2>
+        </ng-template>
+
+        <div class="form-wrapper">
+            <form
+                [formGroup]="loanForm"
+                (submit)="save()"
+            >
+                <div>
+                    <h3>Dados do empréstimo</h3>
+                    <div class="form-group">
+                        <label for="nome">Id cliente:</label>
+                        <input
+                            type="text"
+                            id="cliente"
+                            pInputText
+                            formControlName="cliente"
+                        />
+                        <div *ngIf="loanForm.get('cliente')?.touched && loanForm.get('cliente')?.invalid">
+                            Nome é obrigatório.
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="dataEmprestimo">Data emprestimo:</label>
+                        <p-datepicker
+                            formControlName="dataEmprestimo"
+                            dateFormat="dd/mm/yy"
+                            [iconDisplay]="'input'"
+                            [showIcon]="true"
+                            inputId="icondisplay"
+                        />
+                        <div *ngIf="loanForm.get('dataEmprestimo')?.touched && loanForm.get('dataEmprestimo')?.invalid">
+                            Nome é obrigatório.
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="moeda">Data emprestimo:</label>
+                        <input
+                            type="text"
+                            id="moeda"
+                            pInputText
+                            formControlName="moeda"
+                        />
+                        <div *ngIf="loanForm.get('moeda')?.touched && loanForm.get('moeda')?.invalid">
+                            Nome é obrigatório.
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="valorObtido">valor:</label>
+                        <p-inputnumber
+                            formControlName="valorObtido"
+                            inputId="currency"
+                            mode="currency"
+                            currency="USD"
+                            locale="en-US"
+                            readonly="true"
+                        />
+                        <div *ngIf="loanForm.get('valorObtido')?.touched && loanForm.get('valorObtido')?.invalid">
+                            Nome é obrigatório.
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="taxaConversao">Taxa conversão:</label>
+                        <p-inputnumber
+                            formControlName="taxaConversao"
+                            inputId="currency"
+                            mode="currency"
+                            currency="USD"
+                            locale="en-US"
+                            readonly="true"
+                        />
+                        <div *ngIf="loanForm.get('taxaConversao')?.touched && loanForm.get('taxaConversao')?.invalid">
+                            Nome é obrigatório.
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="dataVencimento">Data Vencimento:</label>
+                        <p-select
+                            formControlName="dataVencimento"
+                            [options]="dataVencimentoConverted"
+                            optionLabel="value"
+                            optionValue="name"
+                            placeholder="Selecionar data vencimento"
+                        />
+                        <div *ngIf="loanForm.get('dataVencimento')?.touched && loanForm.get('dataVencimento')?.invalid">
+                            Nome é obrigatório.
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="periodoParcelamento">Periodo de parcelamento:</label>
+                        <p-select
+                            formControlName="periodoParcelamento"
+                            [options]="installmentPeriodConverted"
+                            optionLabel="value"
+                            optionValue="name"
+                            placeholder="Selecionar periodo de parcelamento"
+                        />
+                        <div
+                            *ngIf="
+                                loanForm.get('periodoParcelamento')?.touched &&
+                                loanForm.get('periodoParcelamento')?.invalid
+                            "
+                        >
+                            Nome é obrigatório.
+                        </div>
+                    </div>
+                    <div class="actions-wrapper">
+                        <button
+                            type="submit"
+                            pButton
+                            label="Gerar Empréstimo"
+                            severity="success"
+                        ></button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </p-card>
+</ng-container>

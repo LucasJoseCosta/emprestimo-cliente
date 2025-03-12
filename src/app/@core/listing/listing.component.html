@@ -1,0 +1,61 @@
+<ng-container *ngIf="!isLoading">
+    <p-card>
+        <p-table
+            [columns]="listingOptions.fields"
+            [value]="listingData.data"
+            [paginator]="true"
+            [rows]="itemsPerPage"
+            [totalRecords]="listingData.totalItemsInData"
+            [loading]="isLoading"
+            [sortField]="sortColumn"
+            [sortOrder]="sortDirection === 'ASC' ? 1 : -1"
+            [lazy]="true"
+            (onPage)="onPageChange($event)"
+            (onSort)="onSortChange($event.field, $event.order === 1 ? sortDirectionEnum.ASC : sortDirectionEnum.DESC)"
+        >
+            <!-- Cabeçalho da Tabela -->
+            <ng-template
+                #header
+                let-columns
+            >
+                <tr>
+                    <th
+                        *ngFor="let field of columns"
+                        [pSortableColumn]="field.entityField"
+                    >
+                        {{ field.title.singular }}
+                        <p-sortIcon [field]="field.entityField"></p-sortIcon>
+                    </th>
+                    <th *ngIf="listingOptions?.mainAction || listingOptions?.actions?.length">Ações</th>
+                </tr>
+            </ng-template>
+
+            <!-- Corpo da Tabela -->
+            <ng-template
+                #body
+                let-rowData
+                let-columns="columns"
+            >
+                <tr (click)="callAction(listingOptions.mainAction, rowData)">
+                    <td *ngFor="let field of columns">
+                        {{ rowData[field.entityField] }}
+                    </td>
+                    <td
+                        *ngIf="listingOptions?.actions?.length"
+                        style="display: flex; gap: 16px"
+                    >
+                        <button
+                            style="width: 100%"
+                            *ngFor="let action of listingOptions?.actions"
+                            (click)="callAction(action, rowData); $event.stopPropagation()"
+                            pButton
+                            pRipple
+                            [severity]="action.severity"
+                            [label]="action.label"
+                        ></button>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </p-card>
+</ng-container>
