@@ -8,6 +8,12 @@ import { StatusEnum } from '../../shared/enums';
     providedIn: 'root',
 })
 export class CustomerStatusFormService {
+    // Region public methods
+    /**
+     * Metodo que criam form de status de customer
+     * @param entity
+     * @returns UntypedFormGroup
+     */
     public create(entity?: Status): UntypedFormGroup {
         let form: StatusForm;
 
@@ -27,6 +33,12 @@ export class CustomerStatusFormService {
         return formGroup;
     }
 
+    /**
+     * Metodo que retorna valor de form de status de customer
+     * @param form
+     * @param entity
+     * @returns Status
+     */
     public merge(form?: UntypedFormGroup, entity?: Status): Status {
         let formValue: Status = form ? form.value : entity ? entity : undefined;
         return {
@@ -34,4 +46,5 @@ export class CustomerStatusFormService {
             dataCadastro: formValue.dataCadastro,
         };
     }
+    // EndRegion public methods
 }

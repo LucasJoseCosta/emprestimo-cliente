@@ -10,6 +10,7 @@ import { ButtonModule } from 'primeng/button';
 import { DatePickerModule } from 'primeng/datepicker';
 import { InputIconModule } from 'primeng/inputicon';
 import { InputNumberModule } from 'primeng/inputnumber';
+import { PanelModule } from 'primeng/panel';
 
 @NgModule({
     imports: [
@@ -25,6 +26,7 @@ import { InputNumberModule } from 'primeng/inputnumber';
         DatePickerModule,
         InputIconModule,
         InputNumberModule,
+        PanelModule,
     ],
     exports: [
         CommonModule,
@@ -39,6 +41,7 @@ import { InputNumberModule } from 'primeng/inputnumber';
         DatePickerModule,
         InputIconModule,
         InputNumberModule,
+        PanelModule,
     ],
 })
 export class CoreCommonModule {}

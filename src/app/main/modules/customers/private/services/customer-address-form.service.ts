@@ -1,12 +1,18 @@
 import { Injectable } from '@angular/core';
 import { Endereco } from '../../shared/types';
 import { EnderecoForm } from '../forms';
-import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 
 @Injectable({
     providedIn: 'root',
 })
 export class CustomerAddressFormService {
+    // Region public methods
+    /**
+     * Metodo que criam form de endereco de customer
+     * @param entity
+     * @returns UntypedFormGroup
+     */
     public create(entity?: Endereco): UntypedFormGroup {
         let form: EnderecoForm;
 
@@ -29,9 +35,20 @@ export class CustomerAddressFormService {
         }
         const formGroup: UntypedFormGroup = new UntypedFormGroup(form);
 
+        formGroup.get('logradouro')?.setValidators([Validators.required]);
+        formGroup.get('numero')?.setValidators([Validators.required]);
+        formGroup.get('bairro')?.setValidators([Validators.required]);
+        formGroup.get('cidade')?.setValidators([Validators.required]);
+        formGroup.get('estado')?.setValidators([Validators.required]);
+
         return formGroup;
     }
-
+    /**
+     * Metodo que retorna valor de form de endereco de customer
+     * @param form
+     * @param entity
+     * @returns Endereco
+     */
     public merge(form?: UntypedFormGroup, entity?: Endereco): Endereco {
         let formValue: Endereco = form ? form.value : entity ? entity : undefined;
         return {
@@ -42,4 +59,5 @@ export class CustomerAddressFormService {
             estado: formValue.estado,
         };
     }
+    // EndRegion public methods
 }

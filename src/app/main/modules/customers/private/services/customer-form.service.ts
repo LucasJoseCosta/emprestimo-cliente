@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { Customer } from '../../shared/types';
 import { CustomerAddressFormService } from './customer-address-form.service';
 import { CustomerBankFormService } from './customer-bank-form.service';
@@ -10,10 +10,22 @@ import { CustomerStatusFormService } from './customer-status-form.service';
     providedIn: 'root',
 })
 export class CustomerFormService {
+    // Region private props
+    /**
+     * Serviço de formulario de endereço de cliente
+     */
     private readonly customerAddressFormService: CustomerAddressFormService;
+    /**
+     * Serviço de formulario de banco de cliente
+     */
     private readonly customerBankFormService: CustomerBankFormService;
+    /**
+     * Serviço de formulario de status de cliente
+     */
     private readonly customerStatusFormService: CustomerStatusFormService;
+    // EndRegion private props
 
+    // Region constructor
     constructor(
         customerAddressFormService: CustomerAddressFormService,
         customerBankFormService: CustomerBankFormService,
@@ -23,7 +35,14 @@ export class CustomerFormService {
         this.customerBankFormService = customerBankFormService;
         this.customerStatusFormService = customerStatusFormService;
     }
+    // EndRegion constructor
 
+    // Region public methods
+    /**
+     * Metodo de criação de form
+     * @param entity
+     * @returns UntypedFormGroup
+     */
     public create(entity?: Customer): UntypedFormGroup {
         let form: CustomerForm;
 
@@ -55,9 +74,21 @@ export class CustomerFormService {
 
         const formGroup: UntypedFormGroup = new UntypedFormGroup(form);
 
+        formGroup.get('nome')?.setValidators([Validators.required]);
+        formGroup.get('cpf')?.setValidators([Validators.required]);
+        formGroup.get('dataNascimento')?.setValidators([Validators.required]);
+        formGroup.get('email')?.setValidators([Validators.required]);
+        formGroup.get('telefone')?.setValidators([Validators.required]);
+
         return formGroup;
     }
 
+    /**
+     * Metodo que converte o valor do form para um customer
+     * @param form
+     * @param entity
+     * @returns Customer
+     */
     public merge(form: UntypedFormGroup, entity?: Customer): Customer {
         let formValue: CustomerFormValue = form.value;
 
@@ -74,4 +105,5 @@ export class CustomerFormService {
             infoBancarias: this.customerBankFormService.merge(undefined, formValue.infoBancarias),
         };
     }
+    // EndRegion public methods
 }

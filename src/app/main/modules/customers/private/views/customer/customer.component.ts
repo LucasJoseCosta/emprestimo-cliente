@@ -17,26 +17,65 @@ import { trigger, transition, style, animate } from '@angular/animations';
 })
 export class CustomerComponent implements OnInit {
     // Region public props
+    /**
+     * Flag de loading
+     */
     public isLoading!: boolean;
 
+    /**
+     * Entidade do tipo Customer
+     * {@link Customer}
+     */
     public customer!: Customer;
 
+    /**
+     * Form de customer
+     */
     public customerForm!: UntypedFormGroup;
 
+    /**
+     * Array de Enum de estados convertido
+     * {@link ConvertedEnum}
+     */
     public estadosConverted!: Array<ConvertedEnum>;
 
+    /**
+     * Array de Enum de bancos convertido
+     * {@link ConvertedEnum}
+     */
     public bancosConverted!: Array<ConvertedEnum>;
 
+    /**
+     * Array de Enum de tipos de conta convertido
+     * {@link ConvertedEnum}
+     */
     public tipoContasConverted!: Array<ConvertedEnum>;
+
+    /**
+     * Data maxima de input data nascimento
+     */
+    public inputMaxDate: Date | undefined;
     // EndRegion public props
 
     // Region private props
+    /**
+     * Serviço de requisição de customer
+     */
     private readonly customerService!: CustomerService;
 
+    /**
+     * Serviço de formulario de customer
+     */
     private readonly customerFormService!: CustomerFormService;
 
+    /**
+     * Serviço de Router
+     */
     private readonly router!: Router;
 
+    /**
+     * Serviço de ActivatedRoute
+     */
     private readonly activatedRoute!: ActivatedRoute;
     // EndRegion private props
 
@@ -62,6 +101,7 @@ export class CustomerComponent implements OnInit {
         this.estadosConverted = this.convertEnum(EstadoEnum);
         this.bancosConverted = this.convertEnum(BancoEnum);
         this.tipoContasConverted = this.convertEnum(TipoContaEnum);
+        this.inputMaxDate = new Date();
 
         this.activatedRoute.params.subscribe((params) => {
             const id = Number(params['id']);
@@ -87,6 +127,9 @@ export class CustomerComponent implements OnInit {
     // EndRegion lifecycle
 
     // Region public methods
+    /**
+     * Metodo de save para edição e criação de customer
+     */
     public save(): void {
         if (this.customerForm.invalid) {
             this.customerForm.markAllAsTouched();
@@ -105,12 +148,19 @@ export class CustomerComponent implements OnInit {
         );
     }
 
+    /**
+     * Metodo para cancelar criação e edição
+     */
     public cancelar(): void {
         this.router.navigate(['/clientes']);
     }
     // EndRegion public methods
 
     // Region private methods
+    /**
+     * Metodo para conversão de enum
+     * @returns array de enum convertido
+     */
     private convertEnum<T extends Record<string, string | number>>(enumObj: T): Array<ConvertedEnum> {
         return Object.entries(enumObj).map(([key, value]) => ({
             name: key,

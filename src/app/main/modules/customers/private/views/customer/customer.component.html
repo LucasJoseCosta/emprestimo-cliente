@@ -1,190 +1,376 @@
-<div *ngIf="!isLoading">
-    <p-card>
-        <ng-template #title>
-            <h2>{{ customer && customer.id ? "Editando editar" : "Criar cliente" }}</h2>
-        </ng-template>
+<div
+    *ngIf="!isLoading"
+    class="px-2"
+>
+    <div class="my-4">
+        <h2>{{ customer && customer.id ? "Editando editar" : "Criar cliente" }}</h2>
+    </div>
+    <p-panel>
         <form
             [formGroup]="customerForm"
             (submit)="save()"
         >
-            <div>
-                <h3>Dados cliente</h3>
-                <div class="form-group">
-                    <label for="nome">Nome:</label>
-                    <input
-                        type="text"
-                        id="nome"
-                        pInputText
-                        formControlName="nome"
-                    />
-                    <div *ngIf="customerForm.get('nome')?.touched && customerForm.get('nome')?.invalid">
-                        Nome é obrigatório.
-                    </div>
-                </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
+                <!-- Dados cliente -->
+                <p-panel>
+                    <ng-template #header>
+                        <h3>Dados cliente</h3>
+                    </ng-template>
 
-                <div class="form-group">
-                    <label for="dataNascimento">Data nascimento:</label>
-                    <p-datepicker
-                        formControlName="dataNascimento"
-                        dateFormat="dd/mm/yy"
-                        [iconDisplay]="'input'"
-                        [showIcon]="true"
-                        inputId="icondisplay"
-                    />
+                    <div class="grid grid-cols-2 gap-2">
+                        <div class="flex flex-col gap-1">
+                            <label for="nome">Nome<span class="text-[#dc2626]">*</span></label>
+                            <input
+                                type="text"
+                                id="nome"
+                                pInputText
+                                formControlName="nome"
+                                [ngClass]="{
+                                    'ng-invalid ng-dirty':
+                                        customerForm.get('nome')?.touched && customerForm.get('nome')?.invalid
+                                }"
+                            />
+                            <div
+                                *ngIf="customerForm.get('nome')?.touched && customerForm.get('nome')?.invalid"
+                                class="text-[#dc2626]"
+                            >
+                                <small>Nome é obrigatório.</small>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-col gap-1">
+                            <label for="dataNascimento">Data de nascimento<span class="text-[#dc2626]">*</span></label>
+                            <p-datepicker
+                                formControlName="dataNascimento"
+                                dateFormat="dd/mm/yy"
+                                [maxDate]="inputMaxDate"
+                                [iconDisplay]="'input'"
+                                [showIcon]="true"
+                                inputId="icondisplay"
+                                styleClass="w-full"
+                                [ngClass]="{
+                                    'ng-invalid ng-dirty':
+                                        customerForm.get('dataNascimento')?.touched &&
+                                        customerForm.get('dataNascimento')?.invalid
+                                }"
+                            />
+                            <div
+                                *ngIf="
+                                    customerForm.get('dataNascimento')?.touched &&
+                                    customerForm.get('dataNascimento')?.invalid
+                                "
+                                class="text-[#dc2626]"
+                            >
+                                <small>Data de nascimento é obrigatória.</small>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-col gap-1">
+                            <label for="cpf">CPF<span class="text-[#dc2626]">*</span></label>
+                            <p-inputMask
+                                type="text"
+                                id="cpf"
+                                mask="999.999.999-99"
+                                formControlName="cpf"
+                                styleClass="w-full"
+                                [ngClass]="{
+                                    'ng-invalid ng-dirty':
+                                        customerForm.get('cpf')?.touched && customerForm.get('cpf')?.invalid
+                                }"
+                            />
+                            <div
+                                *ngIf="customerForm.get('cpf')!.touched && customerForm.get('cpf')?.invalid"
+                                class="text-[#dc2626]"
+                            >
+                                <small>CPF é obrigatório.</small>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-col gap-1">
+                            <label for="email">Email<span class="text-[#dc2626]">*</span></label>
+                            <input
+                                type="email"
+                                id="email"
+                                pInputText
+                                formControlName="email"
+                                [ngClass]="{
+                                    'ng-invalid ng-dirty':
+                                        customerForm.get('email')?.touched && customerForm.get('email')?.invalid
+                                }"
+                            />
+                            <div
+                                *ngIf="customerForm.get('email')!.touched && customerForm.get('email')?.invalid"
+                                class="text-[#dc2626]"
+                            >
+                                <small>Email é obrigatório.</small>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-col gap-1">
+                            <label for="telefone">Telefone<span class="text-[#dc2626]">*</span></label>
+                            <p-inputMask
+                                type="telefone"
+                                id="telefone"
+                                mask="(99) 9.9999-9999"
+                                formControlName="telefone"
+                                styleClass="w-full"
+                                [ngClass]="{
+                                    'ng-invalid ng-dirty':
+                                        customerForm.get('telefone')?.touched && customerForm.get('telefone')?.invalid
+                                }"
+                            />
+                            <div
+                                *ngIf="customerForm.get('telefone')!.touched && customerForm.get('telefone')?.invalid"
+                                class="text-[#dc2626]"
+                            >
+                                <small>Telefone é obrigatório.</small>
+                            </div>
+                        </div>
+                    </div>
+                </p-panel>
+                <!-- end Dados cliente -->
+
+                <!-- Endereço -->
+                <p-panel>
+                    <ng-template #header>
+                        <h3>Endereço</h3>
+                    </ng-template>
                     <div
-                        *ngIf="
-                            customerForm.get('dataNascimento')!.touched && customerForm.get('dataNascimento')?.invalid
-                        "
+                        class="grid grid-cols-2 gap-2"
+                        formGroupName="endereco"
                     >
-                        Data nascimento é obrigatório.
-                    </div>
-                </div>
+                        <div class="flex flex-col gap-1">
+                            <label for="logradouro">Logradouro<span class="text-[#dc2626]">*</span></label>
+                            <input
+                                type="text"
+                                id="logradouro"
+                                pInputText
+                                formControlName="logradouro"
+                                [ngClass]="{
+                                    'ng-invalid ng-dirty':
+                                        customerForm.get('endereco.logradouro')?.touched &&
+                                        customerForm.get('endereco.logradouro')?.invalid
+                                }"
+                            />
+                            <div
+                                *ngIf="
+                                    customerForm.get('endereco.logradouro')!.touched &&
+                                    customerForm.get('endereco.logradouro')?.invalid
+                                "
+                                class="text-[#dc2626]"
+                            >
+                                <small>Logradouro é obrigatório.</small>
+                            </div>
+                        </div>
 
-                <div class="form-group">
-                    <label for="cpf">CPF:</label>
-                    <p-inputMask
-                        type="text"
-                        id="cpf"
-                        mask="999.999.999-99"
-                        formControlName="cpf"
-                    />
-                    <div *ngIf="customerForm.get('cpf')!.touched && customerForm.get('cpf')?.invalid">
-                        CPF é obrigatório.
-                    </div>
-                </div>
+                        <div class="flex flex-col gap-1">
+                            <label for="numero">Número<span class="text-[#dc2626]">*</span></label>
+                            <p-inputnumber
+                                inputId="integeronly"
+                                formControlName="numero"
+                                [ngClass]="{
+                                    'ng-invalid ng-dirty':
+                                        customerForm.get('endereco.numero')?.touched &&
+                                        customerForm.get('endereco.numero')?.invalid
+                                }"
+                            />
+                            <div
+                                *ngIf="
+                                    customerForm.get('endereco.numero')!.touched &&
+                                    customerForm.get('endereco.numero')?.invalid
+                                "
+                                class="text-[#dc2626]"
+                            >
+                                <small>Número é obrigatório.</small>
+                            </div>
+                        </div>
 
-                <div class="form-group">
-                    <label for="email">Email:</label>
-                    <input
-                        type="email"
-                        id="email"
-                        pInputText
-                        formControlName="email"
-                    />
-                    <div *ngIf="customerForm.get('email')!.touched && customerForm.get('email')?.invalid">
-                        Email é obrigatório.
-                    </div>
-                </div>
+                        <div class="flex flex-col gap-1">
+                            <label for="bairro">Bairro<span class="text-[#dc2626]">*</span></label>
+                            <input
+                                type="text"
+                                id="bairro"
+                                pInputText
+                                formControlName="bairro"
+                                [ngClass]="{
+                                    'ng-invalid ng-dirty':
+                                        customerForm.get('endereco.bairro')?.touched &&
+                                        customerForm.get('endereco.bairro')?.invalid
+                                }"
+                            />
+                            <div
+                                *ngIf="
+                                    customerForm.get('endereco.bairro')!.touched &&
+                                    customerForm.get('endereco.bairro')?.invalid
+                                "
+                                class="text-[#dc2626]"
+                            >
+                                <small>Bairro é obrigatório.</small>
+                            </div>
+                        </div>
 
-                <div class="form-group">
-                    <label for="telefone">Telefone:</label>
-                    <p-inputMask
-                        type="telefone"
-                        id="telefone"
-                        mask="(99) 9.9999-9999"
-                        formControlName="telefone"
-                    />
-                    <div *ngIf="customerForm.get('telefone')!.touched && customerForm.get('telefone')?.invalid">
-                        Telefone é obrigatório.
+                        <div class="flex flex-col gap-1">
+                            <label for="cidade">Cidade<span class="text-[#dc2626]">*</span></label>
+                            <input
+                                type="text"
+                                id="cidade"
+                                pInputText
+                                formControlName="cidade"
+                                [ngClass]="{
+                                    'ng-invalid ng-dirty':
+                                        customerForm.get('endereco.cidade')?.touched &&
+                                        customerForm.get('endereco.cidade')?.invalid
+                                }"
+                            />
+                            <div
+                                *ngIf="
+                                    customerForm.get('endereco.cidade')!.touched &&
+                                    customerForm.get('endereco.cidade')?.invalid
+                                "
+                                class="text-[#dc2626]"
+                            >
+                                <small>Cidade é obrigatório.</small>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-col gap-1">
+                            <label for="estado">Estado<span class="text-[#dc2626]">*</span></label>
+                            <p-select
+                                formControlName="estado"
+                                [options]="estadosConverted"
+                                optionLabel="name"
+                                optionValue="name"
+                                placeholder="Selecionar o estado"
+                                [ngClass]="{
+                                    'ng-invalid ng-dirty':
+                                        customerForm.get('endereco.estado')?.touched &&
+                                        customerForm.get('endereco.estado')?.invalid
+                                }"
+                            />
+
+                            <div
+                                *ngIf="
+                                    customerForm.get('endereco.estado')!.touched &&
+                                    customerForm.get('endereco.estado')?.invalid
+                                "
+                                class="text-[#dc2626]"
+                            >
+                                <small>Estado é obrigatório.</small>
+                            </div>
+                        </div>
                     </div>
-                </div>
+                </p-panel>
+                <!-- end Endereço -->
+
+                <!-- Info bancarias -->
+                <p-panel>
+                    <ng-template #header>
+                        <h3>Informações bancárias</h3>
+                    </ng-template>
+                    <div
+                        class="grid grid-cols-2 gap-2"
+                        formGroupName="infoBancarias"
+                    >
+                        <div class="flex flex-col gap-1">
+                            <label for="banco">Banco<span class="text-[#dc2626]">*</span></label>
+                            <p-select
+                                formControlName="banco"
+                                [options]="bancosConverted"
+                                optionLabel="value"
+                                optionValue="name"
+                                placeholder="Selecionar banco"
+                                [ngClass]="{
+                                    'ng-invalid ng-dirty':
+                                        customerForm.get('infoBancarias.banco')?.touched &&
+                                        customerForm.get('infoBancarias.banco')?.invalid
+                                }"
+                            />
+                            <div
+                                *ngIf="
+                                    customerForm.get('infoBancarias.banco')!.touched &&
+                                    customerForm.get('infoBancarias.banco')?.invalid
+                                "
+                                class="text-[#dc2626]"
+                            >
+                                <small>Banco é obrigatório.</small>
+                            </div>
+                        </div>
+                        <div class="flex flex-col gap-1">
+                            <label for="agencia">Agência<span class="text-[#dc2626]">*</span></label>
+                            <input
+                                type="text"
+                                id="agencia"
+                                pInputText
+                                formControlName="agencia"
+                                [ngClass]="{
+                                    'ng-invalid ng-dirty':
+                                        customerForm.get('infoBancarias.agencia')?.touched &&
+                                        customerForm.get('infoBancarias.agencia')?.invalid
+                                }"
+                            />
+                            <div
+                                *ngIf="
+                                    customerForm.get('infoBancarias.agencia')!.touched &&
+                                    customerForm.get('infoBancarias.agencia')?.invalid
+                                "
+                                class="text-[#dc2626]"
+                            >
+                                <small>Agência é obrigatório.</small>
+                            </div>
+                        </div>
+                        <div class="flex flex-col gap-1">
+                            <label for="contaBancaria">Conta<span class="text-[#dc2626]">*</span></label>
+                            <input
+                                type="text"
+                                id="contaBancaria"
+                                pInputText
+                                formControlName="contaBancaria"
+                                [ngClass]="{
+                                    'ng-invalid ng-dirty':
+                                        customerForm.get('infoBancarias.contaBancaria')?.touched &&
+                                        customerForm.get('infoBancarias.contaBancaria')?.invalid
+                                }"
+                            />
+                            <div
+                                *ngIf="
+                                    customerForm.get('infoBancarias.contaBancaria')!.touched &&
+                                    customerForm.get('infoBancarias.contaBancaria')?.invalid
+                                "
+                                class="text-[#dc2626]"
+                            >
+                                <small>Conta é obrigatório.</small>
+                            </div>
+                        </div>
+                        <div class="flex flex-col gap-1">
+                            <label for="tipoConta">Tipo de conta<span class="text-[#dc2626]">*</span></label>
+                            <p-select
+                                formControlName="tipoConta"
+                                [options]="tipoContasConverted"
+                                optionLabel="value"
+                                optionValue="name"
+                                placeholder="Selecionar tipo conta"
+                                [ngClass]="{
+                                    'ng-invalid ng-dirty':
+                                        customerForm.get('infoBancarias.tipoConta')?.touched &&
+                                        customerForm.get('infoBancarias.tipoConta')?.invalid
+                                }"
+                            />
+                            <div
+                                *ngIf="
+                                    customerForm.get('infoBancarias.tipoConta')!.touched &&
+                                    customerForm.get('infoBancarias.tipoConta')?.invalid
+                                "
+                                class="text-[#dc2626]"
+                            >
+                                <small>Tipo da conta é obrigatório.</small>
+                            </div>
+                        </div>
+                    </div>
+                </p-panel>
+                <!-- end Info bancarias -->
             </div>
 
-            <div formGroupName="endereco">
-                <h3>Endereço</h3>
-                <div class="form-group">
-                    <label for="logradouro">Rua:</label>
-                    <input
-                        type="text"
-                        id="logradouro"
-                        pInputText
-                        formControlName="logradouro"
-                    />
-                    <div *ngIf="customerForm.get('endereco.logradouro')!.touched">Rua é obrigatório.</div>
-                </div>
-
-                <div class="form-group">
-                    <label for="numero">Número:</label>
-                    <input
-                        type="text"
-                        id="numero"
-                        pInputText
-                        formControlName="numero"
-                    />
-                    <div *ngIf="customerForm.get('endereco.numero')!.touched">Número é obrigatório.</div>
-                </div>
-
-                <div class="form-group">
-                    <label for="bairro">Bairro:</label>
-                    <input
-                        type="text"
-                        id="bairro"
-                        pInputText
-                        formControlName="bairro"
-                    />
-                    <div *ngIf="customerForm.get('endereco.bairro')!.touched">Número é obrigatório.</div>
-                </div>
-
-                <div class="form-group">
-                    <label for="cidade">Cidade:</label>
-                    <input
-                        type="text"
-                        id="cidade"
-                        pInputText
-                        formControlName="cidade"
-                    />
-                    <div *ngIf="customerForm.get('endereco.cidade')!.touched">Número é obrigatório.</div>
-                </div>
-
-                <div class="form-group">
-                    <label for="estado">Estado:</label>
-                    <p-select
-                        formControlName="estado"
-                        [options]="estadosConverted"
-                        optionLabel="name"
-                        optionValue="name"
-                        placeholder="Selecionar estado"
-                    />
-                    <div *ngIf="customerForm.get('endereco.estado')!.touched">Número é obrigatório.</div>
-                </div>
-            </div>
-
-            <div formGroupName="infoBancarias">
-                <h3>Dados Bancários</h3>
-                <div class="form-group">
-                    <label for="banco">Banco:</label>
-                    <p-select
-                        formControlName="banco"
-                        [options]="bancosConverted"
-                        optionLabel="value"
-                        optionValue="name"
-                        placeholder="Selecionar banco"
-                    />
-                    <div *ngIf="customerForm.get('infoBancarias.banco')!.touched">Banco é obrigatório.</div>
-                </div>
-                <div class="form-group">
-                    <label for="agencia">Agência:</label>
-                    <input
-                        type="text"
-                        id="agencia"
-                        pInputText
-                        formControlName="agencia"
-                    />
-                    <div *ngIf="customerForm.get('infoBancarias.agencia')!.touched">Agência é obrigatório.</div>
-                </div>
-                <div class="form-group">
-                    <label for="contaBancaria">Conta:</label>
-                    <input
-                        type="text"
-                        id="contaBancaria"
-                        pInputText
-                        formControlName="contaBancaria"
-                    />
-                    <div *ngIf="customerForm.get('infoBancarias.contaBancaria')!.touched">Conta é obrigatório.</div>
-                </div>
-                <div class="form-group">
-                    <label for="tipoConta">Tipo de conta:</label>
-                    <p-select
-                        formControlName="tipoConta"
-                        [options]="tipoContasConverted"
-                        optionLabel="value"
-                        optionValue="name"
-                        placeholder="Selecionar tipo conta"
-                    />
-                    <div *ngIf="customerForm.get('infoBancarias.tipoConta')!.touched">Dígito é obrigatório.</div>
-                </div>
-            </div>
-            <div class="actions-wrapper">
+            <div class="flex justify-between">
                 <button
                     type="button"
                     pButton
@@ -195,10 +381,15 @@
                 <button
                     type="submit"
                     pButton
-                    label="Salvar"
-                    [disabled]="customerForm.invalid"
-                ></button>
+                    [disabled]="customerForm.touched && customerForm.invalid"
+                >
+                    <span>Salvar</span>
+                    <i
+                        class="pi"
+                        [ngClass]="{ 'pi-user-plus': !customer, 'pi-user-edit': customer }"
+                    ></i>
+                </button>
             </div>
         </form>
-    </p-card>
+    </p-panel>
 </div>

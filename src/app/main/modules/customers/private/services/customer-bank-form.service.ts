@@ -1,12 +1,18 @@
 import { Injectable } from '@angular/core';
 import { InfoBancarias } from '../../shared/types';
 import { InfoBancariasForm } from '../forms';
-import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 
 @Injectable({
     providedIn: 'root',
 })
 export class CustomerBankFormService {
+    // Region public methods
+    /**
+     * Metodo que criam form de info bancaria de customer
+     * @param entity
+     * @returns UntypedFormGroup
+     */
     public create(entity?: InfoBancarias): UntypedFormGroup {
         let form: InfoBancariasForm;
 
@@ -27,9 +33,19 @@ export class CustomerBankFormService {
         }
         const formGroup: UntypedFormGroup = new UntypedFormGroup(form);
 
+        formGroup.get('banco')?.setValidators([Validators.required]);
+        formGroup.get('agencia')?.setValidators([Validators.required]);
+        formGroup.get('contaBancaria')?.setValidators([Validators.required]);
+        formGroup.get('tipoConta')?.setValidators([Validators.required]);
+
         return formGroup;
     }
-
+    /**
+     * Metodo que retorna valor de form de info bancarias de customer
+     * @param form
+     * @param entity
+     * @returns InfoBancarias
+     */
     public merge(form?: UntypedFormGroup, entity?: InfoBancarias): InfoBancarias {
         let formValue: InfoBancarias = form ? form.value : entity ? entity : undefined;
         return {
@@ -39,4 +55,5 @@ export class CustomerBankFormService {
             tipoConta: formValue.tipoConta,
         };
     }
+    // EndRegion public methods
 }
