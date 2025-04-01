@@ -2,10 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { CustomerService } from '../../../shared/services';
 import { ListingFindPaginatedParams, PaginatedResult } from '../../../../../../@core/types';
 import { Customer } from '../../../shared/types';
-import { ListingData, ListingOptions, SortDirectionEnum } from '../../../../../../@core/listing/common';
+import { ListingData, ListingOptions, SortDirectionEnum } from '../../../../../../@core/components/listing/common';
 import { environment } from '../../../../../../../environments/environment';
 import { StatusEnum } from '../../../shared/enums';
 import { Router } from '@angular/router';
+import { ToastService } from '../../../../../../@core/services/toast.service';
+import { MenuItem } from 'primeng/api';
 
 @Component({
     selector: 'app-customer-list',
@@ -47,23 +49,37 @@ export class CustomerListComponent implements OnInit {
      * @inheritDoc
      */
     public sortDirection!: SortDirectionEnum;
+
+    public breadcrumbItems: Array<MenuItem>;
     // EndRegion public props
     // Region private props
+    /**
+     * Serviço de requisições de customer
+     */
     private readonly customerService: CustomerService;
-
+    /**
+     * Serviço de toast
+     */
+    private readonly toastService: ToastService;
+    /**
+     * Serviço de rota
+     */
     private readonly router: Router;
     // EndRegion private props
 
     // Region constructor
-    constructor(customerService: CustomerService, router: Router) {
+    constructor(customerService: CustomerService, toastService: ToastService, router: Router) {
         // Init public props
         this.isLoading = true;
         this.isSearching = true;
         this.currentPage = 1;
         this.itemsPerPage = environment.pagination.defaultLimit;
 
+        this.breadcrumbItems = [{ label: 'Clientes', routerLink: '/clientes' }];
+
         // Injectables
         this.customerService = customerService;
+        this.toastService = toastService;
         this.router = router;
     }
     // EndRegion constructor
@@ -80,6 +96,9 @@ export class CustomerListComponent implements OnInit {
     // EndRegion Lifecycle Hooks
 
     // Region public methods
+    /**
+     * Carrega dados para listagem
+     */
     public fetchData(): void {
         let listParams: ListingFindPaginatedParams = {
             pageNumber: this.currentPage,
@@ -98,14 +117,19 @@ export class CustomerListComponent implements OnInit {
                 this.isLoading = false;
             },
             (error) => {
-                console.error('Error fetching data', error);
+                this.toastService.showError('Erro de carregamento', error.message);
                 this.isSearching = false;
                 this.isLoading = false;
             }
         );
     }
 
-    public treatsListingData(paginatedResult: PaginatedResult<Customer>) {
+    /**
+     * Faz tratativa de dados para apresentação em tabela
+     * @param paginatedResult
+     * @returns ListingData<Customer>
+     */
+    public treatsListingData(paginatedResult: PaginatedResult<Customer>): ListingData<Customer> {
         let listingData: ListingData<Customer>;
 
         listingData = {
@@ -115,19 +139,28 @@ export class CustomerListComponent implements OnInit {
             })),
             totalItemsInData: paginatedResult.metadata.totalElements,
         };
-        console.log(listingData);
         return listingData;
     }
 
+    /**
+     * Rota de adição de customer
+     */
     public addCustomer(): void {
         this.router.navigate(['clientes/create']);
     }
 
+    /**
+     * Função de troca de página
+     * @param page
+     */
     public onPageChange(page: number): void {
         this.currentPage = page;
         this.fetchData();
     }
-
+    /**
+     * Ordenação de tabela
+     * @param sortData
+     */
     public onSortChange(sortData: { property: string; direction: SortDirectionEnum }): void {
         this.sortColumn = sortData.property;
         this.sortDirection = sortData.direction;
@@ -136,13 +169,20 @@ export class CustomerListComponent implements OnInit {
     // EndRegion public methods
 
     // Region private methods
+    /**
+     * Traduz Enum para tabela
+     * @param statusEnum
+     * @returns StatusEnum
+     */
     private getStatusLabel(statusEnum: string): StatusEnum {
         if (Object.values(StatusEnum).includes(statusEnum as StatusEnum)) {
             return statusEnum as StatusEnum;
         }
         return StatusEnum.ATIVO;
     }
-
+    /**
+     * Configurações de componente de listagem
+     */
     private boostrapListingOptions(): void {
         this.listingOptions = {
             fields: [
@@ -184,7 +224,6 @@ export class CustomerListComponent implements OnInit {
             mainAction: {
                 label: 'Ver detalhes',
                 callback: (params: { entity: Customer }) => {
-                    console.log('Editar para:', params.entity.id);
                     this.router.navigate([`/clientes/${params.entity.id}`]);
                 },
                 actionType: 'view',
@@ -194,7 +233,6 @@ export class CustomerListComponent implements OnInit {
                     label: 'Editar',
                     severity: 'info',
                     callback: (params: { entity: Customer }) => {
-                        console.log('Editar para:', params.entity.id);
                         this.router.navigate([`/clientes/${params.entity.id}`]);
                     },
                     actionType: 'edit',
@@ -211,6 +249,10 @@ export class CustomerListComponent implements OnInit {
         };
     }
 
+    /**
+     * Deleta um customer
+     * @param entity
+     */
     private deleteCliente(entity: Customer): void {
         if (entity.id !== undefined) {
             this.customerService.deleteById(entity.id).subscribe(
@@ -218,11 +260,11 @@ export class CustomerListComponent implements OnInit {
                     this.fetchData();
                 },
                 (error) => {
-                    console.error('Erro ao remover cliente', error);
+                    this.toastService.showError('Error', error.message);
                 }
             );
         } else {
-            console.error('Erro: ID do cliente é undefined.');
+            this.toastService.showError('Error', 'ID do cliente é undefined.');
         }
     }
     // EndRegion private methods

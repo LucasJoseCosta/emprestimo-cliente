@@ -3,7 +3,9 @@
     class="px-2"
 >
     <div class="my-4">
-        <h2>{{ customer && customer.id ? "Editando editar" : "Criar cliente" }}</h2>
+        <h2 class="text-2xl text-(--p-panel-header-color)">
+            {{ customer && customer.id ? "Editar cliente" : "Criar cliente" }}
+        </h2>
     </div>
     <p-panel>
         <form
@@ -14,7 +16,7 @@
                 <!-- Dados cliente -->
                 <p-panel>
                     <ng-template #header>
-                        <h3>Dados cliente</h3>
+                        <h3 class="text-xl">Dados cliente</h3>
                     </ng-template>
 
                     <div class="grid grid-cols-2 gap-2">
@@ -133,7 +135,7 @@
                 <!-- Endereço -->
                 <p-panel>
                     <ng-template #header>
-                        <h3>Endereço</h3>
+                        <h3 class="text-xl">Endereço</h3>
                     </ng-template>
                     <div
                         class="grid grid-cols-2 gap-2"
@@ -265,7 +267,7 @@
                 <!-- Info bancarias -->
                 <p-panel>
                     <ng-template #header>
-                        <h3>Informações bancárias</h3>
+                        <h3 class="text-xl">Informações bancárias</h3>
                     </ng-template>
                     <div
                         class="grid grid-cols-2 gap-2"
@@ -374,10 +376,12 @@
                 <button
                     type="button"
                     pButton
-                    label="Cancelar"
                     severity="danger"
                     (click)="cancelar()"
-                ></button>
+                >
+                    <span>Cancelar</span>
+                    <i class="pi pi-times"></i>
+                </button>
                 <button
                     type="submit"
                     pButton

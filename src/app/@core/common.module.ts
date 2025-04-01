@@ -12,6 +12,7 @@ import { InputIconModule } from 'primeng/inputicon';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { PanelModule } from 'primeng/panel';
 import { ToastModule } from 'primeng/toast';
+import { BreadcrumbModule } from 'primeng/breadcrumb';
 import { MessageService } from 'primeng/api';
 
 @NgModule({
@@ -30,6 +31,7 @@ import { MessageService } from 'primeng/api';
         InputNumberModule,
         PanelModule,
         ToastModule,
+        BreadcrumbModule,
     ],
     exports: [
         CommonModule,
@@ -46,6 +48,7 @@ import { MessageService } from 'primeng/api';
         InputNumberModule,
         PanelModule,
         ToastModule,
+        BreadcrumbModule,
     ],
     providers: [MessageService],
 })

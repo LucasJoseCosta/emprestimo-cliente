@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Loan } from '../../../shared/types';
-import { ListingData, ListingOptions, SortDirectionEnum } from '../../../../../../@core/listing/common';
+import { ListingData, ListingOptions, SortDirectionEnum } from '../../../../../../@core/components/listing/common';
 import { ListingFindPaginatedParams, PaginatedResult } from '../../../../../../@core/types';
 import { LoanService } from '../../../shared/services/loans.service';
 import { Router } from '@angular/router';
