@@ -11,6 +11,8 @@ import { DatePickerModule } from 'primeng/datepicker';
 import { InputIconModule } from 'primeng/inputicon';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { PanelModule } from 'primeng/panel';
+import { ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
 
 @NgModule({
     imports: [
@@ -27,6 +29,7 @@ import { PanelModule } from 'primeng/panel';
         InputIconModule,
         InputNumberModule,
         PanelModule,
+        ToastModule,
     ],
     exports: [
         CommonModule,
@@ -42,6 +45,8 @@ import { PanelModule } from 'primeng/panel';
         InputIconModule,
         InputNumberModule,
         PanelModule,
+        ToastModule,
     ],
+    providers: [MessageService],
 })
 export class CoreCommonModule {}
