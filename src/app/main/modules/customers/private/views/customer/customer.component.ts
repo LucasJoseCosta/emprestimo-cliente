@@ -8,6 +8,8 @@ import { BancoEnum, EstadoEnum, TipoContaEnum } from '../../../shared/enums';
 import { ConvertedEnum } from '../../../../../../@core/types';
 
 import { trigger, transition, style, animate } from '@angular/animations';
+import { ToastService } from '../../../../../../@core/services/toast.service';
+import { MenuItem } from 'primeng/api';
 
 @Component({
     selector: 'app-customer',
@@ -55,6 +57,11 @@ export class CustomerComponent implements OnInit {
      * Data maxima de input data nascimento
      */
     public inputMaxDate: Date | undefined;
+
+    /**
+     * @inheritdoc
+     */
+    public breadcrumbItems: Array<MenuItem>;
     // EndRegion public props
 
     // Region private props
@@ -67,6 +74,11 @@ export class CustomerComponent implements OnInit {
      * Serviço de formulario de customer
      */
     private readonly customerFormService!: CustomerFormService;
+
+    /**
+     * Serviço de toaster
+     */
+    private readonly toastService: ToastService;
 
     /**
      * Serviço de Router
@@ -83,12 +95,20 @@ export class CustomerComponent implements OnInit {
     constructor(
         customerService: CustomerService,
         customerFormService: CustomerFormService,
+        toastService: ToastService,
         router: Router,
         activatedRoute: ActivatedRoute
     ) {
+        //Init props
+        this.breadcrumbItems = [
+            { label: 'Clientes', routerLink: '/clientes' },
+            { label: 'Cliente', disabled: true },
+        ];
+
         // Injectables
         this.customerService = customerService;
         this.customerFormService = customerFormService;
+        this.toastService = toastService;
         this.router = router;
         this.activatedRoute = activatedRoute;
     }
@@ -113,7 +133,7 @@ export class CustomerComponent implements OnInit {
                         this.customerForm = this.customerFormService.create(customer);
                     },
                     (error) => {
-                        console.error('Error fetching customer:', error);
+                        this.toastService.showError('Error', error.message);
                         this.isLoading = false;
                         this.router.navigate(['/clientes']);
                     }
@@ -140,10 +160,11 @@ export class CustomerComponent implements OnInit {
 
         this.customerService.save(customer).subscribe(
             (savedCustomer) => {
+                this.toastService.showSuccess('Adicionado', 'Cliente adicionado com sucesso');
                 this.router.navigate(['/clientes']);
             },
             (error) => {
-                console.error('Error saving customer:', error);
+                this.toastService.showError('Error', error.message);
             }
         );
     }

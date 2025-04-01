@@ -9,7 +9,7 @@ import {
     ViewChild,
 } from '@angular/core';
 import { IListingComponent, ListingAction, ListingData, ListingOptions, SortDirectionEnum } from './common';
-import { Table } from 'primeng/table';
+import { Table, TablePageEvent } from 'primeng/table';
 
 @Component({
     selector: 'app-listing',
@@ -236,8 +236,8 @@ export class ListingComponent implements IListingComponent, OnChanges {
     /**
      * Tratamento para mudança de página (paginator do PrimeNG)
      */
-    public onPageChange(event: any): void {
-        const page = Number(event);
+    public onPageChange(event: TablePageEvent): void {
+        const page = Number(event.first / event.rows + 1);
         this.changePage.emit(page);
     }
     /**
@@ -252,7 +252,6 @@ export class ListingComponent implements IListingComponent, OnChanges {
      * @param item O item da listagem sobre o qual a ação é aplicada.
      */
     public callAction(action: ListingAction, item: any): void {
-        console.log(item);
         if (action && typeof action.callback === 'function') {
             action.callback({ entity: item });
         }

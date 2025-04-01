@@ -49,7 +49,9 @@ export class CustomerListComponent implements OnInit {
      * @inheritDoc
      */
     public sortDirection!: SortDirectionEnum;
-
+    /**
+     * @inheritdoc
+     */
     public breadcrumbItems: Array<MenuItem>;
     // EndRegion public props
     // Region private props
@@ -75,7 +77,7 @@ export class CustomerListComponent implements OnInit {
         this.currentPage = 1;
         this.itemsPerPage = environment.pagination.defaultLimit;
 
-        this.breadcrumbItems = [{ label: 'Clientes', routerLink: '/clientes' }];
+        this.breadcrumbItems = [{ label: 'Clientes', disabled: true }];
 
         // Injectables
         this.customerService = customerService;

@@ -39,10 +39,10 @@ export class CustomerService {
 
         if (listingFindPaginatedParams) {
             if (listingFindPaginatedParams.pageNumber !== undefined) {
-                params = params.set('pageNumber', listingFindPaginatedParams.pageNumber.toString());
+                params = params.set('page', listingFindPaginatedParams.pageNumber.toString());
             }
             if (listingFindPaginatedParams.pageSize !== undefined) {
-                params = params.set('pageSize', listingFindPaginatedParams.pageSize.toString());
+                params = params.set('size', listingFindPaginatedParams.pageSize.toString());
             }
             if (
                 listingFindPaginatedParams.sort !== undefined &&

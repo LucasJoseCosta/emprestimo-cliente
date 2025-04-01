@@ -82,8 +82,6 @@ export class LoansComponent implements OnInit {
                 console.error('Error saving loan:', error);
             }
         );
-
-        console.log(loan);
     }
     // Endregion public methods
 

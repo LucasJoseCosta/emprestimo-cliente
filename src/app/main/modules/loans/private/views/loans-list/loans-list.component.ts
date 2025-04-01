@@ -118,7 +118,6 @@ export class LoansListComponent implements OnInit {
             }),
             totalItemsInData: paginatedResult.metadata.totalElements,
         };
-        console.log(listingData);
         return listingData;
     }
 

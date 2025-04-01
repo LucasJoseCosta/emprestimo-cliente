@@ -22,7 +22,7 @@ export class TopbarComponent implements OnInit {
             {
                 label: 'Home',
                 icon: 'pi pi-home',
-                url: '/',
+                routerLink: '/',
                 target: '_self',
             },
             {
@@ -32,13 +32,13 @@ export class TopbarComponent implements OnInit {
                     {
                         label: 'Lista Empréstimos',
                         icon: 'pi pi-receipt',
-                        url: '/emprestimos',
+                        routerLink: '/emprestimos',
                         target: '_self',
                     },
                     {
                         label: 'Simular Empréstimo',
                         icon: 'pi pi-receipt',
-                        url: '/emprestimos/simulador',
+                        routerLink: '/emprestimos/simulador',
                         target: '_self',
                     },
                 ],
@@ -46,7 +46,7 @@ export class TopbarComponent implements OnInit {
             {
                 label: 'Clientes',
                 icon: 'pi pi-users',
-                url: '/clientes',
+                routerLink: '/clientes',
                 target: '_self',
             },
         ];
