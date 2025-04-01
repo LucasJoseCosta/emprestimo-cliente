@@ -1,129 +1,200 @@
 <ng-container *ngIf="!isLoading">
-    <p-card>
-        <ng-template #title> Simular empréstimo </ng-template>
+    <div>
+        <div>
+            <app-breadcrumb [items]="breadcrumbItems" />
+        </div>
+    </div>
+    <div class="px-2">
+        <p-panel>
+            <ng-template #header>
+                <div class="w-full flex justify-center">
+                    <div class="w-[80%]">
+                        <p-steps
+                            [model]="stepItems"
+                            [activeIndex]="activeIndexStep"
+                            [readonly]="true"
+                        />
+                    </div>
+                </div>
+            </ng-template>
 
-        <div
-            class="form-wrapper"
-            *ngIf="!loanSimulation"
-        >
-            <form
-                [formGroup]="loanSimulationForm"
-                (submit)="simularEmprestimo()"
+            <div
+                class="form-wrapper"
+                *ngIf="!loanSimulation"
             >
-                <div>
-                    <h3>Moedas</h3>
-                    <div class="form-group">
-                        <label for="moeda">Moeda:</label>
-                        <p-select
-                            formControlName="moeda"
-                            [options]="coins"
-                            optionLabel="nomeFormatado"
-                            optionValue="simbolo"
-                            placeholder="Selecionar moeda"
-                            (onChange)="onCurrencyChange($event)"
-                        />
-                    </div>
-                </div>
-                <div *ngIf="currencyQuotes">
-                    <h3>Dados do empréstimo</h3>
-                    <div class="form-group">
-                        <label for="valorObtido">Valor empréstimo:</label>
-                        <p-inputnumber
-                            formControlName="valorObtido"
-                            inputId="currency"
-                            mode="currency"
-                            currency="USD"
-                            locale="en-US"
-                        />
+                <form
+                    [formGroup]="loanSimulationForm"
+                    (submit)="simularEmprestimo()"
+                    class="flex justify-center"
+                >
+                    <p-panel
+                        class="shadow"
+                        [ngClass]="{
+                            'w-[40%]': !currencyQuotes,
+                            'w-[80%]': currencyQuotes
+                        }"
+                    >
                         <div
-                            *ngIf="
-                                loanSimulationForm.get('valorObtido')?.touched &&
-                                loanSimulationForm.get('valorObtido')?.invalid
-                            "
+                            class="grid justify-between"
+                            [ngClass]="{
+                                'grid-cols-[100%]': !currencyQuotes,
+                                'grid-cols-[39%_59%]': currencyQuotes
+                            }"
                         >
-                            Valor do empréstimo é obrigatório.
+                            <div class="flex flex-col">
+                                <label for="moeda">Moeda</label>
+                                <p-select
+                                    formControlName="moeda"
+                                    [options]="coins"
+                                    optionLabel="nomeFormatado"
+                                    optionValue="simbolo"
+                                    placeholder="Selecionar moeda"
+                                    (onChange)="onCurrencyChange($event)"
+                                />
+                            </div>
+                            <div
+                                *ngIf="currencyQuotes"
+                                class="flex flex-col gap-2"
+                            >
+                                <div class="flex flex-col gap-1">
+                                    <label for="valorObtido">Valor empréstimo</label>
+                                    <p-inputnumber
+                                        formControlName="valorObtido"
+                                        inputId="currency"
+                                        mode="currency"
+                                        currency="BRL"
+                                        locale="pt-BR"
+                                        placeholder="R$ 1000,00"
+                                        [ngClass]="{
+                                            'ng-invalid ng-dirty':
+                                                loanSimulationForm.get('valorObtido')?.touched &&
+                                                loanSimulationForm.get('valorObtido')?.invalid
+                                        }"
+                                    />
+                                    <div
+                                        *ngIf="
+                                            loanSimulationForm.get('valorObtido')?.touched &&
+                                            loanSimulationForm.get('valorObtido')?.invalid
+                                        "
+                                        class="text-[#dc2626]"
+                                    >
+                                        <small> Valor do empréstimo é obrigatório.</small>
+                                    </div>
+                                </div>
+                                <div class="flex flex-col gap-1">
+                                    <label for="taxaConversao">Taxa conversão</label>
+                                    <p-inputnumber
+                                        formControlName="taxaConversao"
+                                        inputId="taxaConversao"
+                                        mode="currency"
+                                        [currency]="coin"
+                                        locale="pt-BR"
+                                        readonly="true"
+                                    />
+                                </div>
+                                <div class="flex flex-col gap-1">
+                                    <label for="dataVencimento">Data Vencimento</label>
+                                    <p-select
+                                        formControlName="dataVencimento"
+                                        [options]="dataVencimentoConverted"
+                                        optionLabel="value"
+                                        optionValue="name"
+                                        placeholder="Selecionar data vencimento"
+                                        [ngClass]="{
+                                            'ng-invalid ng-dirty':
+                                                loanSimulationForm.get('dataVencimento')?.touched &&
+                                                loanSimulationForm.get('dataVencimento')?.invalid
+                                        }"
+                                    />
+                                    <div
+                                        *ngIf="
+                                            loanSimulationForm.get('dataVencimento')?.touched &&
+                                            loanSimulationForm.get('dataVencimento')?.invalid
+                                        "
+                                        class="text-[#dc2626]"
+                                    >
+                                        <small>Data de vencimento é obrigatório.</small>
+                                    </div>
+                                </div>
+                                <div class="flex flex-col gap-1">
+                                    <label for="periodoParcelamento">Periodo de parcelamento</label>
+                                    <p-select
+                                        formControlName="periodoParcelamento"
+                                        [options]="installmentPeriodConverted"
+                                        optionLabel="value"
+                                        optionValue="name"
+                                        placeholder="Selecionar periodo de parcelamento"
+                                        [ngClass]="{
+                                            'ng-invalid ng-dirty':
+                                                loanSimulationForm.get('periodoParcelamento')?.touched &&
+                                                loanSimulationForm.get('periodoParcelamento')?.invalid
+                                        }"
+                                    />
+                                    <div
+                                        *ngIf="
+                                            loanSimulationForm.get('periodoParcelamento')?.touched &&
+                                            loanSimulationForm.get('periodoParcelamento')?.invalid
+                                        "
+                                        class="text-[#dc2626]"
+                                    >
+                                        <small>Parcelamento é obrigatório.</small>
+                                    </div>
+                                </div>
+                                <div class="flex justify-end">
+                                    <button
+                                        type="submit"
+                                        pButton
+                                        severity="info"
+                                        [disabled]="loanSimulationForm.touched && loanSimulationForm.invalid"
+                                    >
+                                        <span>Simular empréstimo</span>
+                                        <i class="pi pi-calculator"></i>
+                                    </button>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="taxaConversao">Taxa conversão:</label>
-                        <p-inputnumber
-                            formControlName="taxaConversao"
-                            inputId="currency"
-                            mode="currency"
-                            currency="USD"
-                            locale="en-US"
-                            readonly="true"
-                        />
-                    </div>
-                    <div class="form-group">
-                        <label for="dataVencimento">Data Vencimento:</label>
-                        <p-select
-                            formControlName="dataVencimento"
-                            [options]="dataVencimentoConverted"
-                            optionLabel="value"
-                            optionValue="name"
-                            placeholder="Selecionar data vencimento"
-                        />
-                    </div>
-                    <div class="form-group">
-                        <label for="periodoParcelamento">Periodo de parcelamento:</label>
-                        <p-select
-                            formControlName="periodoParcelamento"
-                            [options]="installmentPeriodConverted"
-                            optionLabel="value"
-                            optionValue="name"
-                            placeholder="Selecionar periodo de parcelamento"
-                        />
-                    </div>
-                    <div class="actions-wrapper">
-                        <button
-                            type="submit"
-                            pButton
-                            label="Simular empréstimo"
-                            severity="info"
-                        ></button>
-                    </div>
-                </div>
-            </form>
-        </div>
+                    </p-panel>
+                </form>
+            </div>
 
-        <div
-            *ngIf="loanSimulation"
-            class="simulate-response"
-        >
-            <div class="group">
-                <h3>Data empréstimo</h3>
-                <p>{{ loanSimulation.dataEmprestimo }}</p>
+            <div
+                *ngIf="loanSimulation"
+                class="simulate-response"
+            >
+                <div class="group">
+                    <h3>Data empréstimo</h3>
+                    <p>{{ formatDateLoanResult(loanSimulation.dataEmprestimo) }}</p>
+                </div>
+                <div class="group">
+                    <h3>Valor empréstimo</h3>
+                    <p>{{ formatCurrency(loanSimulation.valorObtido, "BRL") }}</p>
+                </div>
+                <div class="group">
+                    <h3>Taxa conversão</h3>
+                    <p>{{ formatCurrency(loanSimulation.taxaConversao, loanSimulation.moeda) }}</p>
+                </div>
+                <div class="group">
+                    <h3>Data Vencimento</h3>
+                    <p>{{ getDataLabel(loanSimulation.dataVencimento) }}</p>
+                </div>
+                <div class="group">
+                    <h3>Periodo Parcelamento</h3>
+                    <p>{{ getPeriodoLabel(loanSimulation.periodoParcelamento) }}</p>
+                </div>
+                <div class="group">
+                    <h3>Valor Pagamento</h3>
+                    <p>{{ formatCurrency(loanSimulation.valorPagamento, "BRL") }}</p>
+                </div>
+                <div class="actions-wrapper">
+                    <button
+                        type="button"
+                        pButton
+                        label="Fazer empréstimo"
+                        (click)="criarEmprestimo()"
+                        severity="info"
+                    ></button>
+                </div>
             </div>
-            <div class="group">
-                <h3>Valor empréstimo</h3>
-                <p>{{ loanSimulation.valorObtido }}</p>
-            </div>
-            <div class="group">
-                <h3>Taxa conversão</h3>
-                <p>{{ loanSimulation.taxaConversao }}</p>
-            </div>
-            <div class="group">
-                <h3>Data Vencimento</h3>
-                <p>{{ loanSimulation.dataVencimento }}</p>
-            </div>
-            <div class="group">
-                <h3>Periodo Parcelamento</h3>
-                <p>{{ loanSimulation.periodoParcelamento }}</p>
-            </div>
-            <div class="group">
-                <h3>Valor Pagamento</h3>
-                <p>{{ loanSimulation.valorPagamento }}</p>
-            </div>
-            <div class="actions-wrapper">
-                <button
-                    type="button"
-                    pButton
-                    label="Fazer empréstimo"
-                    (click)="criarEmprestimo()"
-                    severity="info"
-                ></button>
-            </div>
-        </div>
-    </p-card>
+        </p-panel>
+    </div>
 </ng-container>

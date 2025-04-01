@@ -9,6 +9,8 @@ import { UntypedFormGroup } from '@angular/forms';
 import { SelectChangeEvent } from 'primeng/select';
 import { ConvertedEnum } from '../../../../../../@core/types';
 import { DueDateEnum, InstallmentPeriodEnum } from '../../../shared/enums';
+import { MenuItem } from 'primeng/api';
+import { ToastService } from '../../../../../../@core/services/toast.service';
 
 @Component({
     selector: 'app-loans-simulator',
@@ -18,28 +20,72 @@ import { DueDateEnum, InstallmentPeriodEnum } from '../../../shared/enums';
 })
 export class LoansSimulatorComponent implements OnInit {
     // Region public props
+    /**
+     * @inheritdoc
+     */
     public isLoading!: boolean;
-
+    /**
+     * @inheritdoc
+     */
     public loanSimulation!: LoanSimulation;
-
+    /**
+     * @inheritdoc
+     */
     public loanSimulationForm!: UntypedFormGroup;
-
+    /**
+     * @inheritdoc
+     */
     public currencyQuotes!: Array<CurrencyQuote>;
-
+    /**
+     * @inheritdoc
+     */
     public coins!: Array<Coin>;
-
+    /**
+     * @inheritdoc
+     */
+    public coin!: string;
+    /**
+     * @inheritdoc
+     */
     public dataVencimentoConverted!: Array<ConvertedEnum>;
-
+    /**
+     * @inheritdoc
+     */
     public installmentPeriodConverted!: Array<ConvertedEnum>;
+    /**
+     * @inheritdoc
+     */
+    public breadcrumbItems: Array<MenuItem>;
+    /**
+     * @inheritdoc
+     */
+    public stepItems: Array<MenuItem>;
+    /**
+     * @inheritdoc
+     */
+    public activeIndexStep: number;
     // EndRegion public props
 
     // Region private props
+    /**
+     * Serviço de requisições de loans
+     */
     private readonly loansService: LoanService;
-
+    /**
+     * Serviço de form para simular empréstimo
+     */
     private readonly loansSimulatorFormService: LoanSimulationFormService;
-
+    /**
+     * Serviço de requisições para o banco central
+     */
     private readonly bcbService: BCBService;
-
+    /**
+     * Serviço de toaster
+     */
+    private readonly toastService: ToastService;
+    /**
+     * Serviço de rotas
+     */
     private readonly router: Router;
     // EndRegion private props
 
@@ -48,12 +94,27 @@ export class LoansSimulatorComponent implements OnInit {
         loansService: LoanService,
         loansSimulatorFormService: LoanSimulationFormService,
         bcbService: BCBService,
+        toastService: ToastService,
         router: Router
     ) {
+        // Init public props
+        this.activeIndexStep = 0;
+        this.breadcrumbItems = [
+            { label: 'Empréstimos', routerLink: '/emprestimos' },
+            { label: 'Simulador empréstimo', disabled: true },
+        ];
+        this.stepItems = [
+            { label: 'Selecionar moeda' },
+            { label: 'Simular empréstimo' },
+            { label: 'Resultado da simulação' },
+            { label: 'Contratar empréstimo' },
+        ];
+
         // Injectables
         this.loansService = loansService;
         this.loansSimulatorFormService = loansSimulatorFormService;
         this.bcbService = bcbService;
+        this.toastService = toastService;
         this.router = router;
     }
     // EndRegion constructor
@@ -65,17 +126,26 @@ export class LoansSimulatorComponent implements OnInit {
         this.dataVencimentoConverted = this.convertEnum(DueDateEnum);
         this.installmentPeriodConverted = this.convertEnum(InstallmentPeriodEnum);
 
-        console.log(this.dataVencimentoConverted);
-
-        this.bcbService.getCoins().subscribe((response) => {
-            this.coins = response;
-            this.loanSimulationForm = this.loansSimulatorFormService.create();
-            this.isLoading = false;
-        });
+        this.bcbService.getCoins().subscribe(
+            (response) => {
+                this.coins = response;
+                this.loanSimulationForm = this.loansSimulatorFormService.create();
+                this.isLoading = false;
+            },
+            (error) => {
+                this.toastService.showError('Error', error.message);
+                this.router.navigate(['/emprestimos']);
+                this.isLoading = false;
+            }
+        );
     }
     // EndRegion lifecycle
 
     // Region public methods
+    /**
+     * Pega moeda selecionada e adicona valor de cotação no controller para taxaConvesao
+     * @param $event
+     */
     public onCurrencyChange($event: SelectChangeEvent): void {
         let currentDate = new Date();
         let formattedDate = this.formatDate(currentDate);
@@ -85,30 +155,95 @@ export class LoansSimulatorComponent implements OnInit {
             data: formattedDate,
         };
 
-        this.bcbService.getCurrencysQuotes(quotesParams).subscribe((response) => {
-            this.currencyQuotes = response;
-            console.log(this.currencyQuotes);
-            this.loanSimulationForm
-                .get('taxaConversao')
-                ?.patchValue(this.currencyQuotes[this.currencyQuotes.length - 1].cotacaoVenda);
-        });
+        this.coin = $event.value;
+
+        this.bcbService.getCurrencysQuotes(quotesParams).subscribe(
+            (response) => {
+                this.currencyQuotes = response;
+                this.loanSimulationForm
+                    .get('taxaConversao')
+                    ?.patchValue(this.currencyQuotes[this.currencyQuotes.length - 1].cotacaoVenda);
+                this.activeIndexStep = 1;
+            },
+            (error) => {
+                this.toastService.showError('Error', error.message);
+                console.error(error);
+            }
+        );
     }
 
+    /**
+     * Gera o emprestimo simulado
+     */
     public simularEmprestimo(): void {
+        if (this.loanSimulationForm.invalid) {
+            this.loanSimulationForm.markAllAsTouched();
+            return;
+        }
         let loanSimilate: LoanSimulation = this.loansSimulatorFormService.merge(this.loanSimulationForm);
 
         this.loansService.loanSimulation(loanSimilate).subscribe((response) => {
             this.loanSimulation = response;
+            this.activeIndexStep = 2;
         });
     }
 
+    /**
+     * Direciona o emprestimo simulado para a criação do emprestimo
+     */
     public criarEmprestimo(): void {
         this.loansService.loanSimulationData = this.loanSimulation;
         this.router.navigate(['/emprestimos/create']);
     }
+    /**
+     * Formata data para exibição
+     */
+    public formatDateLoanResult(dateString?: string): string {
+        if (!dateString) {
+            return '';
+        }
+        const [year, month, day] = dateString.split('-').map(Number);
+        const date = new Date(year, month - 1, day);
+        return date.toLocaleDateString('pt-BR');
+    }
+
+    public formatCurrency(value?: number, currencyCode?: string): string {
+        if (!value || !currencyCode) {
+            return '';
+        }
+        return new Intl.NumberFormat('pt-BR', {
+            style: 'currency',
+            currency: currencyCode,
+        }).format(value);
+    }
+
+    // Region private methods
+    /**
+     * Converte enum para exibição
+     * @param installmentPeriod
+     * @returns number
+     */
+    public getPeriodoLabel(installmentPeriod: number): number {
+        return Number(InstallmentPeriodEnum[installmentPeriod]);
+    }
+
+    /**
+     * Converte enum para exibição
+     * @param dueDateEnum
+     * @returns number
+     */
+    public getDataLabel(dueDateEnum: number): number {
+        return Number(DueDateEnum[dueDateEnum]);
+    }
+
     // Endregion Public methods
 
     // Region private methods
+    /**
+     * Formata data para requisição de taxa de conversão
+     * @param date
+     * @returns string
+     */
     private formatDate(date: Date): string {
         let month = (date.getMonth() + 1).toString().padStart(2, '0');
         let day = date.getDate().toString().padStart(2, '0');
@@ -117,9 +252,14 @@ export class LoansSimulatorComponent implements OnInit {
         return `${month}-${day}-${year}`;
     }
 
+    /**
+     * Converte enum para select
+     * @param enumObj
+     * @returns Array<ConvertedEnum>
+     */
     private convertEnum<T extends Record<string, string | number>>(enumObj: T): Array<ConvertedEnum> {
         return Object.entries(enumObj)
-            .filter(([key, value]) => isNaN(Number(key))) // Filtra apenas as chaves que são strings
+            .filter(([key, value]) => isNaN(Number(key)))
             .map(([key, value]) => ({
                 name: key,
                 value: value,

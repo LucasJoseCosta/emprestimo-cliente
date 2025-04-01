@@ -99,6 +99,9 @@ export class LoansListComponent implements OnInit {
     // EndRegion Lifecycle Hooks
 
     // Region public methods
+    /**
+     * Requisição de dados da lista
+     */
     public fetchData(): void {
         let listParams: ListingFindPaginatedParams = {
             pageNumber: this.currentPage,
@@ -123,7 +126,11 @@ export class LoansListComponent implements OnInit {
             }
         );
     }
-
+    /**
+     * Trata dados para exibir na listagem
+     * @param paginatedResult
+     * @returns PaginatedResult<Loan>
+     */
     public treatsListingData(paginatedResult: PaginatedResult<Loan>) {
         let listingData: ListingData<Loan>;
 
@@ -263,7 +270,7 @@ export class LoansListComponent implements OnInit {
                     label: 'Remover',
                     severity: 'danger',
                     callback: (params: { entity: Loan }) => {
-                        //this.deleteCliente(params.entity);
+                        this.deleteEmprestimo(params.entity);
                     },
                     actionType: 'remove',
                 },
@@ -271,7 +278,7 @@ export class LoansListComponent implements OnInit {
         };
     }
 
-    private deleteCliente(entity: Loan): void {
+    private deleteEmprestimo(entity: Loan): void {
         if (entity.id !== undefined) {
             this.loanService.deleteById(entity.id).subscribe(
                 () => {

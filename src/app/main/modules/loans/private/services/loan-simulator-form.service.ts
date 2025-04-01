@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { LoanSimulatorForm, LoanSimulatorFormValue } from '../forms';
 import { LoanSimulation } from '../../shared/types';
 
@@ -20,6 +20,11 @@ export class LoanSimulationFormService {
         };
 
         const formGroup = new UntypedFormGroup(form);
+
+        formGroup.get('valorObtido')?.setValidators([Validators.required]);
+        formGroup.get('taxaConversao')?.setValidators([Validators.required]);
+        formGroup.get('dataVencimento')?.setValidators([Validators.required]);
+        formGroup.get('periodoParcelamento')?.setValidators([Validators.required]);
 
         return formGroup;
     }
