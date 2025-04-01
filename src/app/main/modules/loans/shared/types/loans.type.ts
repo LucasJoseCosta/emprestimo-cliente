@@ -14,8 +14,8 @@ export type Loan = {
 
     // Transients
     clienteName?: string;
-    dataVencimentoTable?: string;
-    periodoParcelamentoTable?: string;
+    dataVencimentoTable?: number;
+    periodoParcelamentoTable?: number;
 };
 
 export type LoanSimulation = {

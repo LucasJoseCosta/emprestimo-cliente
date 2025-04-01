@@ -119,7 +119,7 @@ export class CustomerListComponent implements OnInit {
                 this.isLoading = false;
             },
             (error) => {
-                this.toastService.showError('Erro de carregamento', error.message);
+                this.toastService.showError('Error', error.message);
                 this.isSearching = false;
                 this.isLoading = false;
             }

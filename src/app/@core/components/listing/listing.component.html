@@ -24,7 +24,9 @@
                         [pSortableColumn]="field.entityField"
                     >
                         {{ field.title.singular }}
-                        <p-sortIcon [field]="field.entityField"></p-sortIcon>
+                        <ng-container *ngIf="field.orderable">
+                            <p-sortIcon [field]="field.entityField"></p-sortIcon>
+                        </ng-container>
                     </th>
                     <th *ngIf="listingOptions?.mainAction || listingOptions?.actions?.length">Ações</th>
                 </tr>
@@ -42,10 +44,10 @@
                     </td>
                     <td
                         *ngIf="listingOptions?.actions?.length"
-                        style="display: flex; gap: 16px"
+                        class="flex gap-2"
                     >
                         <button
-                            style="width: 100%"
+                            class="w-full"
                             *ngFor="let action of listingOptions?.actions"
                             (click)="callAction(action, rowData); $event.stopPropagation()"
                             pButton

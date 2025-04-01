@@ -6,6 +6,8 @@ import { LoanService } from '../../../shared/services/loans.service';
 import { Router } from '@angular/router';
 import { environment } from '../../../../../../../environments/environment';
 import { DueDateEnum, InstallmentPeriodEnum } from '../../../shared/enums';
+import { MenuItem } from 'primeng/api';
+import { ToastService } from '../../../../../../@core/services/toast.service';
 
 @Component({
     selector: 'app-loans-list',
@@ -47,23 +49,40 @@ export class LoansListComponent implements OnInit {
      * @inheritDoc
      */
     public sortDirection!: SortDirectionEnum;
+    /**
+     * @inheritdoc
+     */
+    public breadcrumbItems: Array<MenuItem>;
     // EndRegion public props
     // Region private props
+    /**
+     * Serviço de requisições empréstimos
+     */
     private readonly loanService: LoanService;
+    /**
+     * Serviço de toaster
+     */
+    private readonly toastService: ToastService;
 
+    /**
+     * Serviço de rotas
+     */
     private readonly router: Router;
     // EndRegion private props
 
     // Region constructor
-    constructor(loanService: LoanService, router: Router) {
+    constructor(loanService: LoanService, toastService: ToastService, router: Router) {
         // Init public props
         this.isLoading = true;
         this.isSearching = true;
         this.currentPage = 1;
         this.itemsPerPage = environment.pagination.defaultLimit;
 
+        this.breadcrumbItems = [{ label: 'Empréstimos', disabled: true }];
+
         // Injectables
         this.loanService = loanService;
+        this.toastService = toastService;
         this.router = router;
     }
     // EndRegion constructor
@@ -98,7 +117,7 @@ export class LoansListComponent implements OnInit {
                 this.isLoading = false;
             },
             (error) => {
-                console.error('Error fetching data', error);
+                this.toastService.showError('Error', error.message);
                 this.isSearching = false;
                 this.isLoading = false;
             }
@@ -110,10 +129,13 @@ export class LoansListComponent implements OnInit {
 
         listingData = {
             data: paginatedResult.content.map((loan) => {
+                loan.dataEmprestimo = this.formatDate(loan.dataEmprestimo);
                 return {
                     ...loan,
                     // Transients
                     clienteName: loan.cliente.nome,
+                    dataVencimentoTable: this.getDataLabel(loan.dataVencimento),
+                    periodoParcelamentoTable: this.getPeriodoLabel(loan.periodoParcelamento),
                 };
             }),
             totalItemsInData: paginatedResult.metadata.totalElements,
@@ -121,15 +143,26 @@ export class LoansListComponent implements OnInit {
         return listingData;
     }
 
-    public addCustomer(): void {
-        this.router.navigate(['clientes/create']);
+    /**
+     * Navega para página de simulação de empréstimo
+     */
+    public simularEmprestimo(): void {
+        this.router.navigate(['emprestimos/simulador']);
     }
 
+    /**
+     * Lida com evento de paginado
+     * @param page
+     */
     public onPageChange(page: number): void {
         this.currentPage = page;
         this.fetchData();
     }
 
+    /**
+     * Lida com evento de ordenação
+     * @param sortData
+     */
     public onSortChange(sortData: { property: string; direction: SortDirectionEnum }): void {
         this.sortColumn = sortData.property;
         this.sortDirection = sortData.direction;
@@ -138,29 +171,38 @@ export class LoansListComponent implements OnInit {
     // EndRegion public methods
 
     // Region private methods
-    // private getStatusLabel(statusEnum: string): StatusEnum {
-    //     if (Object.values(StatusEnum).includes(statusEnum as StatusEnum)) {
-    //         return statusEnum as StatusEnum;
-    //     }
-    //     return StatusEnum.ATIVO;
-    // }
-
-    private getDataLabel(dueDateEnum: string): InstallmentPeriodEnum {
-        const enumValue = Number(dueDateEnum);
-        if (Object.values(DueDateEnum).includes(enumValue)) {
-            return enumValue as InstallmentPeriodEnum;
-        }
-        return InstallmentPeriodEnum.MESES_6;
+    /**
+     * Converte enum para exibição
+     * @param installmentPeriod
+     * @returns number
+     */
+    private getPeriodoLabel(installmentPeriod: number): number {
+        return Number(InstallmentPeriodEnum[installmentPeriod]);
     }
 
-    private getPeriodoLabel(dueDateEnum: string): DueDateEnum {
-        const enumValue = Number(dueDateEnum);
-        if (Object.values(DueDateEnum).includes(enumValue)) {
-            return enumValue as DueDateEnum;
+    /**
+     * Converte enum para exibição
+     * @param dueDateEnum
+     * @returns number
+     */
+    private getDataLabel(dueDateEnum: number): number {
+        return Number(DueDateEnum[dueDateEnum]);
+    }
+    /**
+     * Formata data para exibição
+     */
+    private formatDate(dateString?: string): string {
+        if (!dateString) {
+            return '';
         }
-        return DueDateEnum.DIA_5;
+        const [year, month, day] = dateString.split('-').map(Number);
+        const date = new Date(year, month - 1, day);
+        return date.toLocaleDateString('pt-BR');
     }
 
+    /**
+     * Configurações da tabela
+     */
     private boostrapListingOptions(): void {
         this.listingOptions = {
             fields: [
@@ -173,13 +215,13 @@ export class LoansListComponent implements OnInit {
                 {
                     title: { singular: 'Cliente', plural: 'Clientes' },
                     entityField: 'clienteName',
-                    orderable: true,
+                    orderable: false,
                     searchable: true,
                 },
                 {
                     title: { singular: 'Data Empréstimo', plural: 'Data Empréstimo' },
                     entityField: 'dataEmprestimo',
-                    orderable: false,
+                    orderable: true,
                     searchable: true,
                 },
                 {
@@ -190,12 +232,12 @@ export class LoansListComponent implements OnInit {
                 },
                 {
                     title: { singular: 'Data Vencimento', plural: 'Data Vencimento' },
-                    entityField: 'dataVencimento',
+                    entityField: 'dataVencimentoTable',
                     orderable: true,
                 },
                 {
                     title: { singular: 'Parcela', plural: 'Parcelas' },
-                    entityField: 'periodoParcelamento',
+                    entityField: 'periodoParcelamentoTable',
                     orderable: true,
                 },
             ],
@@ -229,19 +271,19 @@ export class LoansListComponent implements OnInit {
         };
     }
 
-    // private deleteCliente(entity: Customer): void {
-    //     if (entity.id !== undefined) {
-    //         this.customerService.deleteById(entity.id).subscribe(
-    //             () => {
-    //                 this.fetchData();
-    //             },
-    //             (error) => {
-    //                 console.error('Erro ao remover cliente', error);
-    //             }
-    //         );
-    //     } else {
-    //         console.error('Erro: ID do cliente é undefined.');
-    //     }
-    // }
+    private deleteCliente(entity: Loan): void {
+        if (entity.id !== undefined) {
+            this.loanService.deleteById(entity.id).subscribe(
+                () => {
+                    this.fetchData();
+                },
+                (error) => {
+                    this.toastService.showError('Error', error.message);
+                }
+            );
+        } else {
+            this.toastService.showError('Error', 'Erro: ID do cliente é undefined.');
+        }
+    }
     // EndRegion private methods
 }

@@ -58,6 +58,15 @@ export class LoanService {
                 listingFindPaginatedParams.sort.direction !== undefined
             ) {
                 let sortProperty = listingFindPaginatedParams.sort.property;
+
+                if (sortProperty === 'dataVencimentoTable') {
+                    sortProperty = 'dataVencimento';
+                }
+
+                if (sortProperty === 'periodoParcelamentoTable') {
+                    sortProperty = 'periodoParcelamento';
+                }
+
                 params = params.set('sort', `${sortProperty},${listingFindPaginatedParams.sort.direction}`);
             }
         }

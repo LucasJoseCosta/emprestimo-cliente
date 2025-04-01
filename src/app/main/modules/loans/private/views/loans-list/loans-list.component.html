@@ -1,21 +1,30 @@
 <ng-container *ngIf="!isLoading">
-    <div
-        class="customer-list-header"
-        style="display: flex; justify-content: space-between; align-items: center"
-    >
-        <div class="customer-list-header-title">
-            <h2>Empréstimos</h2>
+    <div class="px-2">
+        <div class="flex justify-between items-center">
+            <div>
+                <app-breadcrumb [items]="breadcrumbItems" />
+            </div>
+            <div>
+                <button
+                    pButton
+                    type="button"
+                    (click)="simularEmprestimo()"
+                >
+                    <span>Simular empréstimo</span>
+                    <i class="pi pi-calculator"></i>
+                </button>
+            </div>
         </div>
-    </div>
 
-    <app-listing
-        [listingData]="listingData"
-        [listingOptions]="listingOptions"
-        [isLoading]="isLoading"
-        [itemsPerPage]="itemsPerPage"
-        [currentPage]="currentPage"
-        (changePage)="onPageChange($event)"
-        (sort)="onSortChange($event)"
-    >
-    </app-listing>
+        <app-listing
+            [listingData]="listingData"
+            [listingOptions]="listingOptions"
+            [isLoading]="isLoading"
+            [itemsPerPage]="itemsPerPage"
+            [currentPage]="currentPage"
+            (changePage)="onPageChange($event)"
+            (sort)="onSortChange($event)"
+        >
+        </app-listing>
+    </div>
 </ng-container>
