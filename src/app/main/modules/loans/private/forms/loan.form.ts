@@ -1,5 +1,6 @@
 import { UntypedFormControl } from '@angular/forms';
 import { DueDateEnum, InstallmentPeriodEnum } from '../../shared/enums';
+import { Customer } from '../../../customers/shared/types';
 
 export type LoanForm = {
     cliente: UntypedFormControl;
@@ -14,7 +15,7 @@ export type LoanForm = {
 
 export type LoanFormValue = {
     id?: number;
-    cliente: number;
+    cliente: Customer;
     dataEmprestimo?: string;
     moeda: string;
     valorObtido: number;

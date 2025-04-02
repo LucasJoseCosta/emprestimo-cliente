@@ -148,28 +148,7 @@ export class LoansSimulatorComponent implements OnInit {
      */
     public onCurrencyChange($event: SelectChangeEvent): void {
         let currentDate = new Date();
-        let formattedDate = this.formatDate(currentDate);
-
-        let quotesParams: CurrencyQuoteParams = {
-            moeda: $event.value,
-            data: formattedDate,
-        };
-
-        this.coin = $event.value;
-
-        this.bcbService.getCurrencysQuotes(quotesParams).subscribe(
-            (response) => {
-                this.currencyQuotes = response;
-                this.loanSimulationForm
-                    .get('taxaConversao')
-                    ?.patchValue(this.currencyQuotes[this.currencyQuotes.length - 1].cotacaoVenda);
-                this.activeIndexStep = 1;
-            },
-            (error) => {
-                this.toastService.showError('Error', error.message);
-                console.error(error);
-            }
-        );
+        this.tryGetCurrencyQuote($event.value, currentDate, 0);
     }
 
     /**
@@ -239,6 +218,49 @@ export class LoansSimulatorComponent implements OnInit {
     // Endregion Public methods
 
     // Region private methods
+    /**
+     * Lida com a requisição de taxa de conversão
+     * @param currency
+     * @param date
+     * @param retryCount
+     * @returns taxa de conversão
+     */
+    private tryGetCurrencyQuote(currency: string, date: Date, retryCount: number): void {
+        if (retryCount > 2) {
+            // Limita a tentativa a 2 dias anteriores
+            this.toastService.showError('Erro', 'Não foi possível obter a cotação.');
+            return;
+        }
+
+        let formattedDate = this.formatDate(date);
+
+        let quotesParams: CurrencyQuoteParams = {
+            moeda: currency,
+            data: formattedDate,
+        };
+
+        this.coin = currency;
+
+        this.bcbService.getCurrencysQuotes(quotesParams).subscribe(
+            (response) => {
+                if (response) {
+                    this.currencyQuotes = response;
+                    this.loanSimulationForm
+                        .get('taxaConversao')
+                        ?.patchValue(this.currencyQuotes[this.currencyQuotes.length - 1].cotacaoVenda);
+                    this.activeIndexStep = 1;
+                } else {
+                    let previousDate = new Date(date);
+                    previousDate.setDate(date.getDate() - 1);
+                    this.tryGetCurrencyQuote(currency, previousDate, retryCount + 1);
+                }
+            },
+            (error) => {
+                this.toastService.showError('Erro', error.message);
+                console.error(error);
+            }
+        );
+    }
     /**
      * Formata data para requisição de taxa de conversão
      * @param date

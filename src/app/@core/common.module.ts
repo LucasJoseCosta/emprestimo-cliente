@@ -14,6 +14,7 @@ import { PanelModule } from 'primeng/panel';
 import { ToastModule } from 'primeng/toast';
 import { BreadcrumbModule } from 'primeng/breadcrumb';
 import { StepsModule } from 'primeng/steps';
+import { AutoCompleteModule } from 'primeng/autocomplete';
 import { MessageService } from 'primeng/api';
 
 @NgModule({
@@ -34,6 +35,7 @@ import { MessageService } from 'primeng/api';
         ToastModule,
         BreadcrumbModule,
         StepsModule,
+        AutoCompleteModule,
     ],
     exports: [
         CommonModule,
@@ -52,6 +54,7 @@ import { MessageService } from 'primeng/api';
         ToastModule,
         BreadcrumbModule,
         StepsModule,
+        AutoCompleteModule,
     ],
     providers: [MessageService],
 })

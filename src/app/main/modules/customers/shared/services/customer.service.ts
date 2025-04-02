@@ -57,6 +57,9 @@ export class CustomerService {
 
                 params = params.set('sort', `${sortProperty},${listingFindPaginatedParams.sort.direction}`);
             }
+            if (listingFindPaginatedParams.searchTerm !== undefined) {
+                params = params.set('searchTerm', listingFindPaginatedParams.searchTerm);
+            }
         }
 
         return this.httpClient.get<any>(this.resourceUrl, { params }).pipe(

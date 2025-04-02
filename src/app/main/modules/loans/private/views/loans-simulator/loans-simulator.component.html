@@ -157,44 +157,49 @@
                 </form>
             </div>
 
-            <div
-                *ngIf="loanSimulation"
-                class="simulate-response"
-            >
-                <div class="group">
-                    <h3>Data empréstimo</h3>
-                    <p>{{ formatDateLoanResult(loanSimulation.dataEmprestimo) }}</p>
+            <ng-container *ngIf="loanSimulation">
+                <div class="flex justify-center">
+                    <p-panel class="shadow w-[50%]">
+                        <div class="grid grid-cols-2 gap-4 mb-4">
+                            <div class="flex flex-col items-center gap-1">
+                                <h3 class="font-medium">Data empréstimo</h3>
+                                <p>{{ formatDateLoanResult(loanSimulation.dataEmprestimo) }}</p>
+                            </div>
+                            <div class="flex flex-col items-center gap-1">
+                                <h3 class="font-medium">Taxa conversão</h3>
+                                <p>{{ formatCurrency(loanSimulation.taxaConversao, loanSimulation.moeda) }}</p>
+                            </div>
+                            <div class="flex flex-col items-center gap-1">
+                                <h3 class="font-medium">Data Vencimento</h3>
+                                <p>{{ getDataLabel(loanSimulation.dataVencimento) }}</p>
+                            </div>
+                            <div class="flex flex-col items-center gap-1">
+                                <h3 class="font-medium">Periodo Parcelamento</h3>
+                                <p>{{ getPeriodoLabel(loanSimulation.periodoParcelamento) }}</p>
+                            </div>
+                            <div class="flex flex-col items-center gap-1">
+                                <h3 class="font-medium">Valor empréstimo</h3>
+                                <p>{{ formatCurrency(loanSimulation.valorObtido, "BRL") }}</p>
+                            </div>
+                            <div class="flex flex-col items-center gap-1">
+                                <h3 class="font-medium">Valor Pagamento</h3>
+                                <p>{{ formatCurrency(loanSimulation.valorPagamento, "BRL") }}</p>
+                            </div>
+                        </div>
+                        <div class="flex justify-center">
+                            <button
+                                type="button"
+                                pButton
+                                (click)="criarEmprestimo()"
+                                severity="info"
+                            >
+                                <span>Contratar empréstimo</span>
+                                <i class="pi pi-check"></i>
+                            </button>
+                        </div>
+                    </p-panel>
                 </div>
-                <div class="group">
-                    <h3>Valor empréstimo</h3>
-                    <p>{{ formatCurrency(loanSimulation.valorObtido, "BRL") }}</p>
-                </div>
-                <div class="group">
-                    <h3>Taxa conversão</h3>
-                    <p>{{ formatCurrency(loanSimulation.taxaConversao, loanSimulation.moeda) }}</p>
-                </div>
-                <div class="group">
-                    <h3>Data Vencimento</h3>
-                    <p>{{ getDataLabel(loanSimulation.dataVencimento) }}</p>
-                </div>
-                <div class="group">
-                    <h3>Periodo Parcelamento</h3>
-                    <p>{{ getPeriodoLabel(loanSimulation.periodoParcelamento) }}</p>
-                </div>
-                <div class="group">
-                    <h3>Valor Pagamento</h3>
-                    <p>{{ formatCurrency(loanSimulation.valorPagamento, "BRL") }}</p>
-                </div>
-                <div class="actions-wrapper">
-                    <button
-                        type="button"
-                        pButton
-                        label="Fazer empréstimo"
-                        (click)="criarEmprestimo()"
-                        severity="info"
-                    ></button>
-                </div>
-            </div>
+            </ng-container>
         </p-panel>
     </div>
 </ng-container>

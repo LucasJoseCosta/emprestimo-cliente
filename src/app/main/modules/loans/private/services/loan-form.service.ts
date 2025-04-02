@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { LoanSimulation } from '../../shared/types';
 import { LoanForm, LoanFormSendValue, LoanFormValue } from '../forms/loan.form';
 
@@ -13,7 +13,9 @@ export class LoanFormService {
         if (entity) {
             form = {
                 cliente: new UntypedFormControl(null),
-                dataEmprestimo: new UntypedFormControl(entity.dataEmprestimo ? new Date(entity.dataEmprestimo) : null),
+                dataEmprestimo: new UntypedFormControl(
+                    entity.dataEmprestimo ? this.parseDate(entity.dataEmprestimo) : null
+                ),
                 moeda: new UntypedFormControl(entity.moeda),
                 valorObtido: new UntypedFormControl(entity.valorObtido),
                 taxaConversao: new UntypedFormControl(entity.taxaConversao),
@@ -36,6 +38,15 @@ export class LoanFormService {
 
         const formGroup = new UntypedFormGroup(form);
 
+        formGroup.get('cliente')?.setValidators([Validators.required]);
+        formGroup.get('dataEmprestimo')?.setValidators([Validators.required]);
+        formGroup.get('moeda')?.setValidators([Validators.required]);
+        formGroup.get('valorObtido')?.setValidators([Validators.required]);
+        formGroup.get('taxaConversao')?.setValidators([Validators.required]);
+        formGroup.get('dataVencimento')?.setValidators([Validators.required]);
+        formGroup.get('periodoParcelamento')?.setValidators([Validators.required]);
+        formGroup.get('valorPagamento')?.setValidators([Validators.required]);
+
         return formGroup;
     }
 
@@ -45,7 +56,7 @@ export class LoanFormService {
         return {
             id: entity ? entity.id : undefined,
             cliente: {
-                id: formValue.cliente,
+                id: formValue.cliente.id || 0,
             },
             dataEmprestimo: formValue.dataEmprestimo
                 ? new Date(formValue.dataEmprestimo).toISOString().split('T')[0]
@@ -57,5 +68,10 @@ export class LoanFormService {
             periodoParcelamento: formValue.periodoParcelamento,
             valorPagamento: formValue.valorPagamento,
         };
+    }
+
+    private parseDate(dateString: string) {
+        const parts = dateString.split('-');
+        return new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]));
     }
 }
