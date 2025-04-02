@@ -7,7 +7,8 @@ import { environment } from '../../../../../../../environments/environment';
 import { StatusEnum } from '../../../shared/enums';
 import { Router } from '@angular/router';
 import { ToastService } from '../../../../../../@core/services/toast.service';
-import { MenuItem } from 'primeng/api';
+import { Confirmation, MenuItem } from 'primeng/api';
+import { DialogConfirmationService } from '../../../../../../@core/services';
 
 @Component({
     selector: 'app-customer-list',
@@ -64,13 +65,22 @@ export class CustomerListComponent implements OnInit {
      */
     private readonly toastService: ToastService;
     /**
+     * Serviço de dialog
+     */
+    private readonly dialogConfirmationService: DialogConfirmationService;
+    /**
      * Serviço de rota
      */
     private readonly router: Router;
     // EndRegion private props
 
     // Region constructor
-    constructor(customerService: CustomerService, toastService: ToastService, router: Router) {
+    constructor(
+        customerService: CustomerService,
+        toastService: ToastService,
+        dialogConfirmationService: DialogConfirmationService,
+        router: Router
+    ) {
         // Init public props
         this.isLoading = true;
         this.isSearching = true;
@@ -82,6 +92,7 @@ export class CustomerListComponent implements OnInit {
         // Injectables
         this.customerService = customerService;
         this.toastService = toastService;
+        this.dialogConfirmationService = dialogConfirmationService;
         this.router = router;
     }
     // EndRegion constructor
@@ -243,7 +254,26 @@ export class CustomerListComponent implements OnInit {
                     label: 'Remover',
                     severity: 'danger',
                     callback: (params: { entity: Customer }) => {
-                        this.deleteCliente(params.entity);
+                        let dialog: Confirmation = {
+                            message: 'Tem certeza que quer deletar este cliente ?',
+                            header: 'Deletar',
+                            closable: true,
+                            closeOnEscape: true,
+                            icon: 'pi pi-times-circle',
+                            rejectButtonProps: {
+                                label: 'Cancelar',
+                                severity: 'secondary',
+                                outlined: true,
+                            },
+                            acceptButtonProps: {
+                                label: 'Deletar',
+                                severity: 'danger',
+                            },
+                            accept: () => {
+                                this.deleteCliente(params.entity);
+                            },
+                        };
+                        this.dialogConfirmationService.confirmDialog(dialog);
                     },
                     actionType: 'remove',
                 },
@@ -259,6 +289,7 @@ export class CustomerListComponent implements OnInit {
         if (entity.id !== undefined) {
             this.customerService.deleteById(entity.id).subscribe(
                 () => {
+                    this.toastService.showSuccess('Sucesso', `Cliente com id: ${entity.id} foi deletado com sucesso`);
                     this.fetchData();
                 },
                 (error) => {

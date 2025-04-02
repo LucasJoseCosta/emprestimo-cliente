@@ -6,8 +6,9 @@ import { LoanService } from '../../../shared/services/loans.service';
 import { Router } from '@angular/router';
 import { environment } from '../../../../../../../environments/environment';
 import { DueDateEnum, InstallmentPeriodEnum } from '../../../shared/enums';
-import { MenuItem } from 'primeng/api';
+import { Confirmation, MenuItem } from 'primeng/api';
 import { ToastService } from '../../../../../../@core/services/toast.service';
+import { DialogConfirmationService } from '../../../../../../@core/services';
 
 @Component({
     selector: 'app-loans-list',
@@ -63,7 +64,10 @@ export class LoansListComponent implements OnInit {
      * Serviço de toaster
      */
     private readonly toastService: ToastService;
-
+    /**
+     * Serviço de dialog
+     */
+    private readonly dialogConfirmationService: DialogConfirmationService;
     /**
      * Serviço de rotas
      */
@@ -71,7 +75,12 @@ export class LoansListComponent implements OnInit {
     // EndRegion private props
 
     // Region constructor
-    constructor(loanService: LoanService, toastService: ToastService, router: Router) {
+    constructor(
+        loanService: LoanService,
+        toastService: ToastService,
+        dialogConfirmationService: DialogConfirmationService,
+        router: Router
+    ) {
         // Init public props
         this.isLoading = true;
         this.isSearching = true;
@@ -83,6 +92,7 @@ export class LoansListComponent implements OnInit {
         // Injectables
         this.loanService = loanService;
         this.toastService = toastService;
+        this.dialogConfirmationService = dialogConfirmationService;
         this.router = router;
     }
     // EndRegion constructor
@@ -223,13 +233,11 @@ export class LoansListComponent implements OnInit {
                     title: { singular: 'Cliente', plural: 'Clientes' },
                     entityField: 'clienteName',
                     orderable: false,
-                    searchable: true,
                 },
                 {
                     title: { singular: 'Data Empréstimo', plural: 'Data Empréstimo' },
                     entityField: 'dataEmprestimo',
                     orderable: true,
-                    searchable: true,
                 },
                 {
                     title: { singular: 'Moeda', plural: 'Moedas' },
@@ -257,20 +265,39 @@ export class LoansListComponent implements OnInit {
                 actionType: 'view',
             },
             actions: [
-                {
-                    label: 'Editar',
-                    severity: 'info',
-                    callback: (params: { entity: Loan }) => {
-                        console.log('Editar para:', params.entity.id);
-                        // this.router.navigate([`/clientes/${params.entity.id}`]);
-                    },
-                    actionType: 'edit',
-                },
+                // {
+                //     label: 'Editar',
+                //     severity: 'info',
+                //     callback: (params: { entity: Loan }) => {
+                //         console.log('Editar para:', params.entity.id);
+                //         // this.router.navigate([`/clientes/${params.entity.id}`]);
+                //     },
+                //     actionType: 'edit',
+                // },
                 {
                     label: 'Remover',
                     severity: 'danger',
                     callback: (params: { entity: Loan }) => {
-                        this.deleteEmprestimo(params.entity);
+                        let dialog: Confirmation = {
+                            message: 'Tem certeza que quer deletar este empréstimo ?',
+                            header: 'Deletar',
+                            closable: true,
+                            closeOnEscape: true,
+                            icon: 'pi pi-times-circle',
+                            rejectButtonProps: {
+                                label: 'Cancelar',
+                                severity: 'secondary',
+                                outlined: true,
+                            },
+                            acceptButtonProps: {
+                                label: 'Deletar',
+                                severity: 'danger',
+                            },
+                            accept: () => {
+                                this.deleteEmprestimo(params.entity);
+                            },
+                        };
+                        this.dialogConfirmationService.confirmDialog(dialog);
                     },
                     actionType: 'remove',
                 },
@@ -282,6 +309,10 @@ export class LoansListComponent implements OnInit {
         if (entity.id !== undefined) {
             this.loanService.deleteById(entity.id).subscribe(
                 () => {
+                    this.toastService.showSuccess(
+                        'Sucesso',
+                        `Empréstimo com id: ${entity.id} foi deletado com sucesso`
+                    );
                     this.fetchData();
                 },
                 (error) => {

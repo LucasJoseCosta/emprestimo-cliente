@@ -15,7 +15,8 @@ import { ToastModule } from 'primeng/toast';
 import { BreadcrumbModule } from 'primeng/breadcrumb';
 import { StepsModule } from 'primeng/steps';
 import { AutoCompleteModule } from 'primeng/autocomplete';
-import { MessageService } from 'primeng/api';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ConfirmationService, MessageService } from 'primeng/api';
 
 @NgModule({
     imports: [
@@ -36,6 +37,7 @@ import { MessageService } from 'primeng/api';
         BreadcrumbModule,
         StepsModule,
         AutoCompleteModule,
+        ConfirmDialogModule,
     ],
     exports: [
         CommonModule,
@@ -55,7 +57,8 @@ import { MessageService } from 'primeng/api';
         BreadcrumbModule,
         StepsModule,
         AutoCompleteModule,
+        ConfirmDialogModule,
     ],
-    providers: [MessageService],
+    providers: [ConfirmationService, MessageService],
 })
 export class CoreCommonModule {}
