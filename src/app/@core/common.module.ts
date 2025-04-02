@@ -16,6 +16,8 @@ import { BreadcrumbModule } from 'primeng/breadcrumb';
 import { StepsModule } from 'primeng/steps';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { TabsModule } from 'primeng/tabs';
+import { ChartModule } from 'primeng/chart';
 import { ConfirmationService, MessageService } from 'primeng/api';
 
 @NgModule({
@@ -38,6 +40,8 @@ import { ConfirmationService, MessageService } from 'primeng/api';
         StepsModule,
         AutoCompleteModule,
         ConfirmDialogModule,
+        TabsModule,
+        ChartModule,
     ],
     exports: [
         CommonModule,
@@ -58,6 +62,8 @@ import { ConfirmationService, MessageService } from 'primeng/api';
         StepsModule,
         AutoCompleteModule,
         ConfirmDialogModule,
+        TabsModule,
+        ChartModule,
     ],
     providers: [ConfirmationService, MessageService],
 })

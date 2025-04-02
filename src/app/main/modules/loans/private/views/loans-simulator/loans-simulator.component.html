@@ -33,6 +33,7 @@
                             'w-[40%]': !currencyQuotes,
                             'w-[80%]': currencyQuotes
                         }"
+                        showHeader="false"
                     >
                         <div
                             class="grid justify-between"
@@ -159,7 +160,10 @@
 
             <ng-container *ngIf="loanSimulation">
                 <div class="flex justify-center">
-                    <p-panel class="shadow w-[50%]">
+                    <p-panel
+                        showHeader="false"
+                        class="shadow w-[50%]"
+                    >
                         <div class="grid grid-cols-2 gap-4 mb-4">
                             <div class="flex flex-col items-center gap-1">
                                 <h3 class="font-medium">Data empréstimo</h3>
