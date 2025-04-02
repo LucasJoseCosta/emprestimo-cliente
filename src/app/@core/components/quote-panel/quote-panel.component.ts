@@ -8,6 +8,9 @@ import { QuotesTab } from '../../types';
 })
 export class QuotePanelComponent {
     // Region Inputs & Outputs
+    /**
+     * Entrada de dados para tabeado
+     */
     @Input() public quotesTabs!: Array<QuotesTab>;
     // EndRegion Inputs & Outputs
 
@@ -19,6 +22,12 @@ export class QuotePanelComponent {
     ngOnInit(): void {}
     // EndRegion Life Cycle
 
+    /**
+     * Formata valores de cotações para exibição no front
+     * @param value
+     * @param currencyCode
+     * @returns string
+     */
     public formatCurrency(value?: number, currencyCode?: string): string {
         if (value === undefined || value === null || !currencyCode) {
             return '';
