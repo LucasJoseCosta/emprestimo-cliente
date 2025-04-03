@@ -4,6 +4,7 @@ import { QuotesTab } from '../../types';
 @Component({
     selector: 'app-quote-panel',
     templateUrl: './quote-panel.component.html',
+    styleUrls: ['./quote-panel.component.css'],
     standalone: false,
 })
 export class QuotePanelComponent {

@@ -277,7 +277,6 @@ export class HomeComponent implements OnInit {
         const periodLabels = Object.keys(loansGrouped).sort();
         const loansCount = periodLabels.map((label) => loansGrouped[label]);
         const maxLoans = Math.max(...loansCount);
-        console.log(maxLoans);
 
         this.dataChartLoans = {
             labels: periodLabels,
@@ -295,10 +294,9 @@ export class HomeComponent implements OnInit {
         this.optionsChartLoans = {
             responsive: true,
             plugins: {
-                legend: { position: 'top' },
+                legend: { display: false },
                 title: {
-                    display: true,
-                    text: `Distribuição de Empréstimos por ${this.getPeriodLabel(selectedPeriod)}`,
+                    display: false,
                 },
             },
             scales: {
@@ -339,13 +337,12 @@ export class HomeComponent implements OnInit {
             const date = parseISO(loan.dataEmprestimo ?? '');
             let key: string;
             if (period === 'week') {
-                const start = startOfWeek(date, { weekStartsOn: 0 }); // Segunda-feira
-                const end = endOfWeek(date, { weekStartsOn: 0 }); // Sexta-feira
+                const start = startOfWeek(date, { weekStartsOn: 0 });
+                const end = endOfWeek(date, { weekStartsOn: 0 });
                 key = `${format(start, 'dd/MM/yyyy')} - ${format(end, 'dd/MM/yyyy')}`;
             } else if (period === 'month') {
                 key = format(date, 'MM/yyyy');
             } else {
-                // 'year'
                 key = format(date, 'yyyy');
             }
 

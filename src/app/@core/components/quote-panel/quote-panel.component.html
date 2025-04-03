@@ -1,7 +1,11 @@
-<p-panel showHeader="false">
+<p-panel
+    showHeader="false"
+    styleClass="pb-0"
+>
     <p-tabs
         [value]="quotesTabs[0].tab"
         scrollable
+        class="p-0"
     >
         <p-tablist>
             @for (tab of quotesTabs; track tab.tab){

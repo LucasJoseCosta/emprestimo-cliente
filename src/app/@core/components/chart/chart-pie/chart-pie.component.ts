@@ -7,7 +7,18 @@ import { ChartData, ChartOptions } from 'chart.js';
     standalone: false,
 })
 export class ChartPieComponent {
-    @Input() data!: ChartData;
-
-    @Input() options!: ChartOptions;
+    // Region Inputs
+    /**
+     * @inheritdoc
+     */
+    @Input() public data!: ChartData;
+    /**
+     * @inheritdoc
+     */
+    @Input() public options!: ChartOptions;
+    /**
+     * @inheritdoc
+     */
+    @Input() public title!: string;
+    // EndRegion Inputs
 }
