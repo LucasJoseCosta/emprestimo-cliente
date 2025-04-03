@@ -1,15 +1,40 @@
 <div
     *ngIf="!isLoading"
-    class="mt-2 px-2"
+    class="mt-2 px-2 grid grid-cols-6 grid-rows-2 gap-4"
 >
-    <app-quote-panel [quotesTabs]="quotesTabs"></app-quote-panel>
     <p-panel
+        class="col-span-4"
+        styleClass="shadow h-full"
         showHeader="false"
-        styleClass="w-[40%]"
     >
-        <app-chart-pie
-            [data]="dataChartCustomers"
-            [options]="optionsChartCustomers"
-        ></app-chart-pie>
+        <app-chart-bar
+            [data]="dataChartLoans"
+            [options]="optionsChartLoans"
+            [actions]="loansChartActions"
+        ></app-chart-bar>
+    </p-panel>
+
+    <div class="col-span-2 col-end-7 flex flex-col justify-between">
+        <app-quote-panel [quotesTabs]="quotesTabs"></app-quote-panel>
+
+        <p-panel
+            showHeader="false"
+            styleClass="shadow"
+        >
+            <app-chart-pie
+                [data]="dataChartCustomers"
+                [options]="optionsChartCustomers"
+            ></app-chart-pie>
+        </p-panel>
+    </div>
+
+    <p-panel
+        class="col-span-6"
+        showHeader="false"
+    >
+        <app-chart-bar
+            [data]="dataChartLoansInstallment"
+            [options]="optionsChartLoansInstallment"
+        ></app-chart-bar>
     </p-panel>
 </div>

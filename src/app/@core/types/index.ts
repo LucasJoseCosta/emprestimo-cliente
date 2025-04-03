@@ -6,3 +6,4 @@ export * from './paginated-result-metadata.class';
 export * from './listing-find-paginated-params.type';
 export * from './enum-converted-select.type';
 export * from './quotes-panel.type';
+export * from './chart-action.type';

@@ -1,3 +1,17 @@
+<ng-container *ngIf="actions">
+    <div class="flex gap-1 w-fit">
+        <button
+            *ngFor="let action of actions"
+            (click)="callAction(action); $event.stopPropagation()"
+            pButton
+            pRipple
+            [severity]="action.severity"
+            [label]="action.label"
+            outlined="true"
+        ></button>
+    </div>
+</ng-container>
+
 <p-chart
     type="bar"
     [data]="data"
