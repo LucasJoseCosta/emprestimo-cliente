@@ -10,6 +10,7 @@ import {
 } from '@angular/core';
 import { IListingComponent, ListingAction, ListingData, ListingOptions, SortDirectionEnum } from './common';
 import { Table, TablePageEvent } from 'primeng/table';
+import { StatusEnum } from '../../../main/modules/customers/shared/enums';
 
 @Component({
     selector: 'app-listing',
@@ -162,6 +163,7 @@ export class ListingComponent implements IListingComponent, OnChanges {
     // Region public props
     public sortDirectionEnum = SortDirectionEnum;
 
+    public StatusEnum = StatusEnum;
     // Endregion public props
 
     // Region private props

@@ -21,7 +21,7 @@
                 <tr>
                     <th
                         *ngFor="let field of columns"
-                        [pSortableColumn]="field.entityField"
+                        [pSortableColumn]="field.orderable ? field.entityField : null"
                     >
                         {{ field.title.singular }}
                         <ng-container *ngIf="field.orderable">
@@ -40,7 +40,40 @@
             >
                 <tr (click)="callAction(listingOptions.mainAction, rowData)">
                     <td *ngFor="let field of columns">
-                        {{ rowData[field.entityField] }}
+                        <ng-container *ngIf="field.entityField === 'statusTable'; else defaultCell">
+                            <ng-container [ngSwitch]="rowData[field.entityField]">
+                                <p-tag
+                                    *ngSwitchCase="StatusEnum.ATIVO"
+                                    severity="success"
+                                    [value]="rowData[field.entityField]"
+                                />
+                                <p-tag
+                                    *ngSwitchCase="StatusEnum.INADIMPLENTE"
+                                    severity="danger"
+                                    [value]="rowData[field.entityField]"
+                                />
+                                <p-tag
+                                    *ngSwitchCase="StatusEnum.INATIVO"
+                                    severity="secondary"
+                                    [value]="rowData[field.entityField]"
+                                />
+                                <p-tag
+                                    *ngSwitchCase="StatusEnum.PENDENTE"
+                                    severity="warn"
+                                    [value]="rowData[field.entityField]"
+                                />
+                                <p-tag
+                                    *ngSwitchDefault
+                                    severity="info"
+                                    value="Desconhecido"
+                                />
+                            </ng-container>
+                        </ng-container>
+
+                        <!-- Caso contrário, renderiza um TD normal -->
+                        <ng-template #defaultCell>
+                            {{ rowData[field.entityField] }}
+                        </ng-template>
                     </td>
                     <td
                         *ngIf="listingOptions?.actions?.length"

@@ -229,7 +229,7 @@ export class CustomerListComponent implements OnInit {
                 {
                     title: { singular: 'Status', plural: 'Status' },
                     entityField: 'statusTable',
-                    orderable: false,
+                    orderable: true,
                 },
             ],
             mainAction: {

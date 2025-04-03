@@ -19,6 +19,7 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { TabsModule } from 'primeng/tabs';
 import { ChartModule } from 'primeng/chart';
 import { SelectButtonModule } from 'primeng/selectbutton';
+import { TagModule } from 'primeng/tag';
 import { ConfirmationService, MessageService } from 'primeng/api';
 
 @NgModule({
@@ -44,6 +45,7 @@ import { ConfirmationService, MessageService } from 'primeng/api';
         TabsModule,
         ChartModule,
         SelectButtonModule,
+        TagModule,
     ],
     exports: [
         CommonModule,
@@ -67,6 +69,7 @@ import { ConfirmationService, MessageService } from 'primeng/api';
         TabsModule,
         ChartModule,
         SelectButtonModule,
+        TagModule,
     ],
     providers: [ConfirmationService, MessageService],
 })
