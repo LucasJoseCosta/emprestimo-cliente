@@ -9,6 +9,11 @@ import { Router, RouterModule } from '@angular/router';
                 path: '',
                 loadChildren: () => import('./main/sample/home.module').then((m) => m.HomeModule),
             },
+            // Auth page
+            {
+                path: 'auth',
+                loadChildren: () => import('./main/modules/auth/private/auth.module').then((m) => m.AuthModule),
+            },
             // Customers module
             {
                 path: 'clientes',
