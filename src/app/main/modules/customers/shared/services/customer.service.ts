@@ -71,6 +71,10 @@ export class CustomerService {
         );
     }
 
+    public findAll(): Observable<Array<Customer>> {
+        return this.httpClient.get<Array<Customer>>(`${this.resourceUrl}/all`);
+    }
+
     public findById(id: number): Observable<Customer> {
         return this.httpClient.get<Customer>(`${this.resourceUrl}/${id}`);
     }

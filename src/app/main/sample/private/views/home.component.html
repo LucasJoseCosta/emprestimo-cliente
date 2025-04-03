@@ -3,4 +3,13 @@
     class="mt-2 px-2"
 >
     <app-quote-panel [quotesTabs]="quotesTabs"></app-quote-panel>
+    <p-panel
+        showHeader="false"
+        styleClass="w-[40%]"
+    >
+        <app-chart-pie
+            [data]="dataChartCustomers"
+            [options]="optionsChartCustomers"
+        ></app-chart-pie>
+    </p-panel>
 </div>

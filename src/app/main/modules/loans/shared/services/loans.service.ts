@@ -80,6 +80,10 @@ export class LoanService {
         );
     }
 
+    public findAll(): Observable<Array<Loan>> {
+        return this.httpClient.get<Array<Loan>>(`${this.resourceUrl}/all`);
+    }
+
     public findById(id: number): Observable<Loan> {
         return this.httpClient.get<Loan>(`${this.resourceUrl}/${id}`);
     }

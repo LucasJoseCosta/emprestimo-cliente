@@ -188,10 +188,8 @@ export class CustomerListComponent implements OnInit {
      * @returns StatusEnum
      */
     private getStatusLabel(statusEnum: string): StatusEnum {
-        if (Object.values(StatusEnum).includes(statusEnum as StatusEnum)) {
-            return statusEnum as StatusEnum;
-        }
-        return StatusEnum.ATIVO;
+        const status = Object.keys(StatusEnum).find((key) => key === statusEnum) as keyof typeof StatusEnum;
+        return status ? StatusEnum[status] : StatusEnum.ATIVO;
     }
     /**
      * Configurações de componente de listagem
