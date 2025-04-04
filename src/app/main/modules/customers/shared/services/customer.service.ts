@@ -62,7 +62,7 @@ export class CustomerService {
             }
         }
 
-        return this.httpClient.get<any>(this.resourceUrl, { params }).pipe(
+        return this.httpClient.get<any>(this.resourceUrl, { params, withCredentials: true }).pipe(
             map((response) => {
                 const content: Customer[] = response.content || [];
                 const metadata = PaginatedResultMetadata.fromResponse(response);
@@ -72,22 +72,22 @@ export class CustomerService {
     }
 
     public findAll(): Observable<Array<Customer>> {
-        return this.httpClient.get<Array<Customer>>(`${this.resourceUrl}/all`);
+        return this.httpClient.get<Array<Customer>>(`${this.resourceUrl}/all`, { withCredentials: true });
     }
 
     public findById(id: number): Observable<Customer> {
-        return this.httpClient.get<Customer>(`${this.resourceUrl}/${id}`);
+        return this.httpClient.get<Customer>(`${this.resourceUrl}/${id}`, { withCredentials: true });
     }
 
     public save(customer: Customer): Observable<Customer> {
         if (customer.id == null) {
             return this.httpClient.post<Customer>(this.resourceUrl, customer);
         }
-        return this.httpClient.put<Customer>(`${this.resourceUrl}/${customer.id}`, customer);
+        return this.httpClient.put<Customer>(`${this.resourceUrl}/${customer.id}`, customer, { withCredentials: true });
     }
 
     public deleteById(id: number): Observable<Customer> {
-        return this.httpClient.delete<Customer>(`${this.resourceUrl}/${id}`);
+        return this.httpClient.delete<Customer>(`${this.resourceUrl}/${id}`, { withCredentials: true });
     }
     // EndRegion public methods
 }

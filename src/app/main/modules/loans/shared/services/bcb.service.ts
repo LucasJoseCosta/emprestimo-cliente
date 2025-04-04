@@ -30,7 +30,7 @@ export class BCBService {
     }
 
     public getCoins(): Observable<Array<Coin>> {
-        return this.httpClient.get<Array<Coin>>(`${this.resourceUrl}/moedas`);
+        return this.httpClient.get<Array<Coin>>(`${this.resourceUrl}/moedas`, { withCredentials: true });
     }
 
     public getCurrencysQuotes(params: CurrencyQuoteParams): Observable<Array<CurrencyQuote>> {
@@ -44,6 +44,9 @@ export class BCBService {
             paramsReq = paramsReq.set('data', params.data);
         }
 
-        return this.httpClient.get<Array<CurrencyQuote>>(`${this.resourceUrl}/cotacao`, { params: paramsReq });
+        return this.httpClient.get<Array<CurrencyQuote>>(`${this.resourceUrl}/cotacao`, {
+            params: paramsReq,
+            withCredentials: true,
+        });
     }
 }

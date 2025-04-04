@@ -20,6 +20,8 @@ import { TabsModule } from 'primeng/tabs';
 import { ChartModule } from 'primeng/chart';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { TagModule } from 'primeng/tag';
+import { FloatLabelModule } from 'primeng/floatlabel';
+import { PasswordModule } from 'primeng/password';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { SkeletonComponentModule } from './components';
 import { ChartComponentModule } from './components/chart/chart.module';
@@ -50,6 +52,8 @@ import { ChartComponentModule } from './components/chart/chart.module';
         TagModule,
         SkeletonComponentModule,
         ChartComponentModule,
+        FloatLabelModule,
+        PasswordModule,
     ],
     exports: [
         CommonModule,
@@ -76,6 +80,8 @@ import { ChartComponentModule } from './components/chart/chart.module';
         TagModule,
         SkeletonComponentModule,
         ChartComponentModule,
+        FloatLabelModule,
+        PasswordModule,
     ],
     providers: [ConfirmationService, MessageService],
 })

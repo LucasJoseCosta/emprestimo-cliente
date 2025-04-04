@@ -11,6 +11,7 @@ import { StatusEnum } from '../../../modules/customers/shared/enums';
 import { InstallmentPeriodEnum } from '../../../modules/loans/shared/enums';
 import { parseISO, startOfWeek, endOfWeek, format } from 'date-fns';
 import { ChartAction } from '../../../../@core/components/chart/common';
+import { ToastService } from '../../../../@core/services';
 
 @Component({
     selector: 'app-home',
@@ -86,10 +87,19 @@ export class HomeComponent implements OnInit {
      * Serviço de requisições loan
      */
     private readonly loanService: LoanService;
+    /**
+     * Serviço de toaster
+     */
+    private readonly toastService: ToastService;
     // EndRegion private props
 
     // Region constructor
-    constructor(bcbService: BCBService, customerService: CustomerService, loanService: LoanService) {
+    constructor(
+        bcbService: BCBService,
+        customerService: CustomerService,
+        loanService: LoanService,
+        toastService: ToastService
+    ) {
         // Init public props
         this.isLoading = true;
         this.quotesTabs = [];
@@ -98,6 +108,7 @@ export class HomeComponent implements OnInit {
         this.bcbService = bcbService;
         this.customerService = customerService;
         this.loanService = loanService;
+        this.toastService = toastService;
     }
     // EndRegion constructor
 
@@ -130,6 +141,7 @@ export class HomeComponent implements OnInit {
                 },
                 (error) => {
                     console.error(error);
+                    this.toastService.showError('Error', error.message.message);
                     this.isLoading = false;
                 }
             );

@@ -71,7 +71,7 @@ export class LoanService {
             }
         }
 
-        return this.httpClient.get<any>(this.resourceUrl, { params }).pipe(
+        return this.httpClient.get<any>(this.resourceUrl, { params, withCredentials: true }).pipe(
             map((response) => {
                 const content: Loan[] = response.content || [];
                 const metadata = PaginatedResultMetadata.fromResponse(response);
@@ -81,26 +81,28 @@ export class LoanService {
     }
 
     public findAll(): Observable<Array<Loan>> {
-        return this.httpClient.get<Array<Loan>>(`${this.resourceUrl}/all`);
+        return this.httpClient.get<Array<Loan>>(`${this.resourceUrl}/all`, { withCredentials: true });
     }
 
     public findById(id: number): Observable<Loan> {
-        return this.httpClient.get<Loan>(`${this.resourceUrl}/${id}`);
+        return this.httpClient.get<Loan>(`${this.resourceUrl}/${id}`, { withCredentials: true });
     }
 
     public save(loan: LoanFormSendValue): Observable<Loan> {
         if (loan.id == null) {
             return this.httpClient.post<Loan>(this.resourceUrl, loan);
         } else {
-            return this.httpClient.put<Loan>(`${this.resourceUrl}/${loan.id}`, loan);
+            return this.httpClient.put<Loan>(`${this.resourceUrl}/${loan.id}`, loan, { withCredentials: true });
         }
     }
 
     public deleteById(id: number): Observable<Loan> {
-        return this.httpClient.delete<Loan>(`${this.resourceUrl}/${id}`);
+        return this.httpClient.delete<Loan>(`${this.resourceUrl}/${id}`, { withCredentials: true });
     }
 
     public loanSimulation(loanSimulation: LoanSimulation): Observable<LoanSimulation> {
-        return this.httpClient.post<LoanSimulation>(`${this.resourceUrl}/simular`, loanSimulation);
+        return this.httpClient.post<LoanSimulation>(`${this.resourceUrl}/simular`, loanSimulation, {
+            withCredentials: true,
+        });
     }
 }

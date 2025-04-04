@@ -6,7 +6,7 @@ import { LoginComponent, RegisterComponent } from './views';
     imports: [
         RouterModule.forChild([
             {
-                path: '',
+                path: 'login',
                 component: LoginComponent,
             },
             {
