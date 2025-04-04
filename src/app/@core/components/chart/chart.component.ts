@@ -132,7 +132,6 @@ export class ChartComponent implements IChartComponent, OnInit, OnChanges {
         if (this.actions) {
             this.selectedAction = this.actions.find((action) => action.label === this.defaultAction) || null;
         }
-        console.log(this.title);
     }
 
     ngOnChanges(changes: SimpleChanges): void {

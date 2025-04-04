@@ -1,5 +1,4 @@
 import { NgModule } from '@angular/core';
-import { ChartPieComponent } from './chart-pie/chart-pie.component';
 import { ChartModule } from 'primeng/chart';
 import { ChartComponent } from './chart.component';
 import { PanelModule } from 'primeng/panel';
@@ -8,8 +7,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
-    declarations: [ChartComponent, ChartPieComponent],
+    declarations: [ChartComponent],
     imports: [CommonModule, FormsModule, ChartModule, PanelModule, SelectButton],
-    exports: [ChartComponent, ChartPieComponent],
+    exports: [ChartComponent],
 })
 export class ChartComponentModule {}

@@ -19,11 +19,10 @@
         showHeader="false"
         styleClass="pt-4.5"
     >
-        <ng-container *ngIf="type === 'bar'"
-            ><p-chart
-                type="bar"
-                [data]="data"
-                [options]="options"
-        /></ng-container>
+        <p-chart
+            [type]="type"
+            [data]="data"
+            [options]="options"
+        />
     </p-panel>
 </div>
