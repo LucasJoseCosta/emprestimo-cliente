@@ -15,15 +15,15 @@
             />
         </ng-container>
     </div>
-
     <p-panel
         showHeader="false"
         styleClass="pt-4.5"
     >
-        <p-chart
-            type="bar"
-            [data]="data"
-            [options]="options"
-        />
+        <ng-container *ngIf="type === 'bar'"
+            ><p-chart
+                type="bar"
+                [data]="data"
+                [options]="options"
+        /></ng-container>
     </p-panel>
 </div>

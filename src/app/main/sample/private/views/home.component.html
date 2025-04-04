@@ -10,21 +10,22 @@
             <app-quote-panel [quotesTabs]="quotesTabs"></app-quote-panel>
         </div>
 
-        <app-chart-pie
+        <!-- <app-chart-pie
             [data]="dataChartCustomers"
             [options]="optionsChartCustomers"
             title="Clientes"
-        ></app-chart-pie>
+        ></app-chart-pie> -->
     </div>
 
     <div class="col-span-4">
-        <app-chart-bar
+        <app-chart
+            [type]="typeChartLoans"
             [data]="dataChartLoans"
             [options]="optionsChartLoans"
             [actions]="loansChartActions"
             defaultAction="Mês"
-            title="Empréstimos"
-        ></app-chart-bar>
+            [title]="titleChartsLoans"
+        ></app-chart>
     </div>
 
     <!-- <p-panel

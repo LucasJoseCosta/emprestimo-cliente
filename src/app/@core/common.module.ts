@@ -22,6 +22,7 @@ import { SelectButtonModule } from 'primeng/selectbutton';
 import { TagModule } from 'primeng/tag';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { SkeletonComponentModule } from './components';
+import { ChartComponentModule } from './components/chart/chart.module';
 
 @NgModule({
     imports: [
@@ -48,6 +49,7 @@ import { SkeletonComponentModule } from './components';
         SelectButtonModule,
         TagModule,
         SkeletonComponentModule,
+        ChartComponentModule,
     ],
     exports: [
         CommonModule,
@@ -73,6 +75,7 @@ import { SkeletonComponentModule } from './components';
         SelectButtonModule,
         TagModule,
         SkeletonComponentModule,
+        ChartComponentModule,
     ],
     providers: [ConfirmationService, MessageService],
 })

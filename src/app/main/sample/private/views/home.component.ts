@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ChartData, ChartOptions } from 'chart.js';
-import { ChartAction, QuotesTab } from '../../../../@core/types';
+import { ChartData, ChartOptions, ChartType } from 'chart.js';
+import { QuotesTab } from '../../../../@core/types';
 import { BCBService } from '../../../modules/loans/shared/services/bcb.service';
 import { CurrencyQuoteParams, Loan } from '../../../modules/loans/shared/types';
 import { forkJoin, map, max, Observable, Observer } from 'rxjs';
@@ -10,11 +10,11 @@ import { Customer } from '../../../modules/customers/shared/types';
 import { StatusEnum } from '../../../modules/customers/shared/enums';
 import { InstallmentPeriodEnum } from '../../../modules/loans/shared/enums';
 import { parseISO, startOfWeek, endOfWeek, format } from 'date-fns';
+import { ChartAction } from '../../../../@core/components/chart/common';
 
 @Component({
     selector: 'app-home',
     templateUrl: './home.component.html',
-    styleUrls: ['./home.component.scss'],
     standalone: false,
 })
 export class HomeComponent implements OnInit {
@@ -51,6 +51,14 @@ export class HomeComponent implements OnInit {
      * @inheritdoc
      */
     public optionsChartLoansInstallment!: ChartOptions<'bar'>;
+    /**
+     * @inheritdoc
+     */
+    public titleChartsLoans!: string;
+    /**
+     * @inheritdoc
+     */
+    public typeChartLoans!: ChartType;
     /**
      * @inheritdoc
      */
@@ -271,6 +279,9 @@ export class HomeComponent implements OnInit {
      * Popula e configura gráfico de quantidade de empréstimo por periodo
      */
     private initConfigLoansChart(loans: Array<Loan>) {
+        this.titleChartsLoans = 'Empréstimos';
+        this.typeChartLoans = 'bar';
+
         const selectedPeriod: 'week' | 'month' | 'year' = 'month';
 
         const loansGrouped = this.groupLoansByPeriod(loans, selectedPeriod);
