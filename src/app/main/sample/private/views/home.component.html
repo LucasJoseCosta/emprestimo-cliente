@@ -37,3 +37,8 @@
         ></app-chart-bar>
     </p-panel> -->
 </div>
+
+<ng-container *ngIf="isLoading">
+    <app-skeleton></app-skeleton>
+    <app-skeleton></app-skeleton>
+</ng-container>
