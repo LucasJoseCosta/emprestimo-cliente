@@ -1,17 +1,16 @@
-<div>
-    <div class="flex flex-col gap-2">
+<div class="h-screen flex items-center justify-center">
+    <div class="flex flex-col gap-1">
+        <div class="flex">
+            <h2 class="text-xl font-semibold text-(--p-panel-header-color) py-[0.425rem]">Login</h2>
+        </div>
         <p-panel
             class="w-full"
             [styleClass]="'p-panel-login'"
         >
-            <ng-template #header>
-                <div class="flex flex-col gap-2">
-                    <h2 class="text-xl font-semibold text-(--p-panel-header-color) py-[0.425rem]">Login</h2>
-                </div>
-            </ng-template>
             <form
                 [formGroup]="loginForm"
                 (submit)="onSubmit()"
+                class="flex flex-col gap-2"
             >
                 <div>
                     <p-float-label variant="on">
@@ -20,6 +19,7 @@
                             type="text"
                             id="username"
                             formControlName="username"
+                            fluid
                         />
                         <label for="username">Usuario</label>
                     </p-float-label>
@@ -31,16 +31,17 @@
                             formControlName="password"
                             [feedback]="false"
                             [toggleMask]="true"
+                            fluid
                         />
                         <label for="username">Senha</label>
                     </p-float-label>
                 </div>
-                <div>
+                <div class="flex justify-end">
                     <p-button
                         type="submit"
                         severity="info"
+                        label="Login"
                     >
-                        <span>Logar</span>
                     </p-button>
                 </div>
             </form>

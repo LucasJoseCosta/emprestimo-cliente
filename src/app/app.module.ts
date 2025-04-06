@@ -18,7 +18,7 @@ import { JwtInterceptor } from './@core/helpers';
             theme: {
                 preset: Aura,
                 options: {
-                    darkModeSelector: false || 'none',
+                    darkModeSelector: '.dark',
                 },
             },
         }),

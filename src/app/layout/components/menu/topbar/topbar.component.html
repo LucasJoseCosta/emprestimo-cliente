@@ -1,6 +1,22 @@
 <div class="px-2 mt-2">
-    <p-menubar
-        class="shadow"
-        [model]="items"
-    />
+    <p-menubar [model]="items">
+        <ng-template pTemplate="start">
+            <span class="logo">
+                <img
+                    src="img/logo-loan.png"
+                    alt="Logo Loan"
+                    width="60"
+                />
+            </span>
+        </ng-template>
+        <ng-template pTemplate="end">
+            <button
+                pButton
+                severity="secondary"
+                icon="pi pi-sign-out"
+                label="Sair"
+                (click)="logout()"
+            ></button>
+        </ng-template>
+    </p-menubar>
 </div>

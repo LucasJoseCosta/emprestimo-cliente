@@ -23,6 +23,7 @@ export class AuthGuard implements CanActivate {
     }
 
     public canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): MaybeAsync<GuardResult> {
+        console.log('entrou auqi');
         if (this.authService.isTokenValid()) {
             if (state.url === '/auth/login') {
                 return this.router.navigate(['/dashboard']);

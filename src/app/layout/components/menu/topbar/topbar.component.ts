@@ -1,5 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MenuItem } from 'primeng/api';
+import { AuthenticateService } from '../../../../main/modules/auth/shared/services';
+import { ToastService } from '../../../../@core/services';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-topbar',
@@ -12,17 +15,26 @@ export class TopbarComponent implements OnInit {
     public items: MenuItem[] = [];
     // EndRegion public props
     // Region private props
-
+    private readonly authService: AuthenticateService;
+    private readonly toastService: ToastService;
+    private readonly router: Router;
     // EndRegion private props
 
-    constructor() {}
+    // Region constructor
+    constructor(authService: AuthenticateService, toastService: ToastService, router: Router) {
+        // Injectables
+        this.authService = authService;
+        this.toastService = toastService;
+        this.router = router;
+    }
+    // EndRegion constructor
 
     ngOnInit(): void {
         this.items = [
             {
                 label: 'Home',
                 icon: 'pi pi-home',
-                routerLink: '/',
+                router: '/',
             },
             {
                 label: 'Empréstimos',
@@ -31,25 +43,29 @@ export class TopbarComponent implements OnInit {
                     {
                         label: 'Lista Empréstimos',
                         icon: 'pi pi-receipt',
-                        routerLink: '/emprestimos',
+                        router: '/emprestimos',
                     },
                     {
                         label: 'Simular Empréstimo',
                         icon: 'pi pi-calculator',
-                        routerLink: '/emprestimos/simulador',
+                        router: '/emprestimos/simulador',
                     },
                 ],
             },
             {
                 label: 'Clientes',
                 icon: 'pi pi-users',
-                routerLink: '/clientes',
+                router: '/clientes',
             },
         ];
     }
 
     // Region public methods
-
+    public logout() {
+        this.authService.logout();
+        this.router.navigate(['/auth/login']);
+        this.toastService.showSuccess('Sucesso', 'Logout realizado com sucesso!');
+    }
     // EndRegion public methods
 
     // Region private methods
