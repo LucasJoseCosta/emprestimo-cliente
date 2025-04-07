@@ -148,7 +148,7 @@ export class LoansSimulatorComponent implements OnInit {
      */
     public onCurrencyChange($event: SelectChangeEvent): void {
         let currentDate = new Date();
-        this.tryGetCurrencyQuote($event.value, currentDate, 0);
+        this.tryGetCurrencyQuote($event.value, currentDate);
     }
 
     /**
@@ -242,16 +242,10 @@ export class LoansSimulatorComponent implements OnInit {
      * @param retryCount
      * @returns taxa de conversão
      */
-    private tryGetCurrencyQuote(currency: string, date: Date, retryCount: number): void {
-        if (retryCount > 2) {
-            // Limita a tentativa a 2 dias anteriores
-            this.toastService.showError('Erro', 'Não foi possível obter a cotação.');
-            return;
-        }
+    private tryGetCurrencyQuote(currency: string, date: Date): void {
+        const formattedDate = this.formatDate(date);
 
-        let formattedDate = this.formatDate(date);
-
-        let quotesParams: CurrencyQuoteParams = {
+        const quotesParams: CurrencyQuoteParams = {
             moeda: currency,
             data: formattedDate,
         };
@@ -267,9 +261,9 @@ export class LoansSimulatorComponent implements OnInit {
                         ?.patchValue(this.currencyQuotes[this.currencyQuotes.length - 1].cotacaoVenda);
                     this.activeIndexStep = 1;
                 } else {
-                    let previousDate = new Date(date);
+                    const previousDate = new Date(date);
                     previousDate.setDate(date.getDate() - 1);
-                    this.tryGetCurrencyQuote(currency, previousDate, retryCount + 1);
+                    this.tryGetCurrencyQuote(currency, previousDate);
                 }
             },
             (error) => {

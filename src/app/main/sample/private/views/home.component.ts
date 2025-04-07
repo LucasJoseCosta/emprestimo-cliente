@@ -118,7 +118,7 @@ export class HomeComponent implements OnInit {
         this.bcbService.getCoins().subscribe((coins) => {
             // Cria um Observable para cada coin que obtém a cotação
             let requests: Observable<any>[] = coins.map((coin) =>
-                this.getCurrencyQuoteObservable(coin.simbolo, new Date(), 0)
+                this.getCurrencyQuoteObservable(coin.simbolo, new Date())
             );
 
             const loanRequest = this.loanService.findAll().pipe(map((loans) => ({ loans })));
@@ -151,29 +151,31 @@ export class HomeComponent implements OnInit {
 
     // Region private methods
     /**
-     * Retorna um Observable para buscar a cotação da moeda
+     * Função auxiliar criando Observers para obter a cotação da moeda
      */
-    private getCurrencyQuoteObservable(currency: string, date: Date, retryCount: number): Observable<void> {
+    private getCurrencyQuoteObservable(currency: string, date: Date): Observable<void> {
         return new Observable<void>((observer) => {
-            this.tryGetCurrencyQuote(currency, date, retryCount, observer);
+            this.tryGetCurrencyQuote(currency, date, observer);
         });
     }
 
     /**
-     * Faz a requisição de taxa de conversão
+     * Função auxiliar recursiva para obter a cotação da moeda
+     * @param currency
+     * @param date
+     * @param observer
      */
-    private tryGetCurrencyQuote(currency: string, date: Date, retryCount: number, observer: Observer<void>) {
-        let formattedDate = this.formatDate(date);
-
-        let quotesParams: CurrencyQuoteParams = {
+    private tryGetCurrencyQuote(currency: string, date: Date, observer: Observer<void>) {
+        const formattedDate = this.formatDate(date);
+        const quotesParams: CurrencyQuoteParams = {
             moeda: currency,
             data: formattedDate,
         };
 
         this.bcbService.getCurrencysQuotes(quotesParams).subscribe(
             (response) => {
-                if (response) {
-                    let quoteTab: QuotesTab = {
+                if (response && response.length > 0) {
+                    const quoteTab: QuotesTab = {
                         tab: currency,
                         value: response[response.length - 1].cotacaoVenda,
                     };
@@ -181,13 +183,9 @@ export class HomeComponent implements OnInit {
                     observer.next();
                     observer.complete();
                 } else {
-                    let previousDate = new Date(date);
+                    const previousDate = new Date(date);
                     previousDate.setDate(date.getDate() - 1);
-                    if (retryCount < 2) {
-                        this.tryGetCurrencyQuote(currency, previousDate, retryCount + 1, observer);
-                    } else {
-                        observer.error('Não foi possível obter a cotação.');
-                    }
+                    this.tryGetCurrencyQuote(currency, previousDate, observer);
                 }
             },
             (error) => {
