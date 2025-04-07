@@ -34,7 +34,7 @@ export class TopbarComponent implements OnInit {
             {
                 label: 'Home',
                 icon: 'pi pi-home',
-                router: '/',
+                routerLink: '/',
             },
             {
                 label: 'Empréstimos',
@@ -43,19 +43,19 @@ export class TopbarComponent implements OnInit {
                     {
                         label: 'Lista Empréstimos',
                         icon: 'pi pi-receipt',
-                        router: '/emprestimos',
+                        routerLink: '/emprestimos',
                     },
                     {
                         label: 'Simular Empréstimo',
                         icon: 'pi pi-calculator',
-                        router: '/emprestimos/simulador',
+                        routerLink: '/emprestimos/simulador',
                     },
                 ],
             },
             {
                 label: 'Clientes',
                 icon: 'pi pi-users',
-                router: '/clientes',
+                routerLink: '/clientes',
             },
         ];
     }
@@ -64,7 +64,7 @@ export class TopbarComponent implements OnInit {
     public logout() {
         this.authService.logout();
         this.router.navigate(['/auth/login']);
-        this.toastService.showSuccess('Sucesso', 'Logout realizado com sucesso!');
+        this.toastService.showInfo('Sucesso', 'Logout realizado com sucesso!');
     }
     // EndRegion public methods
 

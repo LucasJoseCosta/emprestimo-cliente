@@ -90,7 +90,7 @@ export class LoanService {
 
     public save(loan: LoanFormSendValue): Observable<Loan> {
         if (loan.id == null) {
-            return this.httpClient.post<Loan>(this.resourceUrl, loan);
+            return this.httpClient.post<Loan>(this.resourceUrl, loan, { withCredentials: true });
         } else {
             return this.httpClient.put<Loan>(`${this.resourceUrl}/${loan.id}`, loan, { withCredentials: true });
         }
