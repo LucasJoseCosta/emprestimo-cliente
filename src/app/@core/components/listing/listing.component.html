@@ -1,5 +1,8 @@
 <ng-container *ngIf="!isLoading">
-    <p-panel showHeader="false">
+    <p-panel
+        showHeader="false"
+        styleClass="pt-4.5"
+    >
         <p-table
             [columns]="listingOptions.fields"
             [value]="listingData.data"

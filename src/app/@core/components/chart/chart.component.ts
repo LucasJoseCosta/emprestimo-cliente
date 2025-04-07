@@ -5,6 +5,7 @@ import { ChartAction, IChartComponent } from './common';
 @Component({
     selector: 'app-chart',
     templateUrl: './chart.component.html',
+    styleUrls: ['./chart.component.css'],
     standalone: false,
 })
 export class ChartComponent implements IChartComponent, OnInit, OnChanges {

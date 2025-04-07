@@ -1,3 +1,14 @@
 ::ng-deep p-panel .p-panel-content {
     padding-bottom: 0 !important;
 }
+::ng-deep p-tabs p-tablist .p-tablist-tab-list .p-tab-active {
+    color: #209999 !important;
+}
+
+::ng-deep p-tabs p-tablist .p-tablist-tab-list p-tab:hover {
+    color: #209999 !important;
+}
+
+::ng-deep p-tabs p-tablist .p-tablist-tab-list .p-tablist-active-bar {
+    background-color: #209999 !important;
+}

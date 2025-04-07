@@ -1,0 +1,3 @@
+::ng-deep p-selectbutton p-togglebutton .p-togglebutton.p-togglebutton-checked::before {
+    background: #197f7f !important;
+}

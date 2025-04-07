@@ -1,0 +1,3 @@
+::ng-deep p-table p-paginator .p-paginator .p-paginator-pages .p-paginator-page.p-paginator-page-selected {
+    background: #209999 !important;
+}

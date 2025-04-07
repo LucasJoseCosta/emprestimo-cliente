@@ -17,7 +17,7 @@ export class BreadcrumbComponent {
 
     // Region constructor
     constructor() {
-        this.home = { routerLink: '/' };
+        this.home = { routerLink: '/', iconStyle: { color: '#2CCFCF' }, icon: 'pi pi-home' };
     }
     // Endregion constructor
 }

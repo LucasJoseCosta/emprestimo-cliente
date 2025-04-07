@@ -34,20 +34,24 @@ export class TopbarComponent implements OnInit {
             {
                 label: 'Home',
                 icon: 'pi pi-home',
+                iconStyle: { color: '#2CCFCF' },
                 routerLink: '/',
             },
             {
                 label: 'Empréstimos',
                 icon: 'pi pi-money-bill',
+                iconStyle: { color: '#2CCFCF' },
                 items: [
                     {
                         label: 'Lista Empréstimos',
                         icon: 'pi pi-receipt',
+                        iconStyle: { color: '#2CCFCF' },
                         routerLink: '/emprestimos',
                     },
                     {
                         label: 'Simular Empréstimo',
                         icon: 'pi pi-calculator',
+                        iconStyle: { color: '#2CCFCF' },
                         routerLink: '/emprestimos/simulador',
                     },
                 ],
@@ -55,6 +59,7 @@ export class TopbarComponent implements OnInit {
             {
                 label: 'Clientes',
                 icon: 'pi pi-users',
+                iconStyle: { color: '#2CCFCF' },
                 routerLink: '/clientes',
             },
         ];

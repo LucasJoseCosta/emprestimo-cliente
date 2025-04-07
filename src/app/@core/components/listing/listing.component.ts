@@ -15,7 +15,7 @@ import { StatusEnum } from '../../../main/modules/customers/shared/enums';
 @Component({
     selector: 'app-listing',
     templateUrl: './listing.component.html',
-    styleUrls: ['./listing.component.scss'],
+    styleUrls: ['./listing.component.css'],
     standalone: false,
 })
 export class ListingComponent implements IListingComponent, OnChanges {
