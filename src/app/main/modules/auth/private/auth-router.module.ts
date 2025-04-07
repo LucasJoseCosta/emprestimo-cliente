@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { LoginComponent, RegisterComponent } from './views';
+import { LoginComponent } from './views';
 
 @NgModule({
     imports: [
@@ -8,10 +8,6 @@ import { LoginComponent, RegisterComponent } from './views';
             {
                 path: 'login',
                 component: LoginComponent,
-            },
-            {
-                path: 'register',
-                component: RegisterComponent,
             },
         ]),
     ],

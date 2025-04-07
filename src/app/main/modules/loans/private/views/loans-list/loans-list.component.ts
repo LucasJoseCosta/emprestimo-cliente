@@ -259,7 +259,7 @@ export class LoansListComponent implements OnInit {
             mainAction: {
                 label: 'Ver detalhes',
                 callback: (params: { entity: Loan }) => {
-                    console.log('Editar para:', params.entity.id);
+                    //console.log('Editar para:', params.entity.id);
                     // this.router.navigate([`/clientes/${params.entity.id}`]);
                 },
                 actionType: 'view',
