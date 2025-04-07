@@ -58,9 +58,15 @@ export class TopbarComponent implements OnInit {
             },
             {
                 label: 'Clientes',
-                icon: 'pi pi-users',
+                icon: 'pi pi-id-card',
                 iconStyle: { color: '#2CCFCF' },
                 routerLink: '/clientes',
+            },
+            {
+                label: 'Usuários',
+                icon: 'pi pi-users',
+                iconStyle: { color: '#2CCFCF' },
+                routerLink: '/usuarios',
             },
         ];
     }

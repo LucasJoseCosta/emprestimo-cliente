@@ -1,0 +1,31 @@
+<ng-container *ngIf="!isLoading">
+    <div class="px-2">
+        <div class="flex justify-between items-center">
+            <div>
+                <app-breadcrumb [items]="breadcrumbItems" />
+            </div>
+            <div>
+                <button
+                    pButton
+                    type="button"
+                    (click)="addUser()"
+                    severity="info"
+                >
+                    <span>Novo usuário</span>
+                    <i class="pi pi-user-plus"></i>
+                </button>
+            </div>
+        </div>
+
+        <app-listing
+            [listingData]="listingData"
+            [listingOptions]="listingOptions"
+            [isLoading]="isLoading"
+            [itemsPerPage]="itemsPerPage"
+            [currentPage]="currentPage"
+            (changePage)="onPageChange($event)"
+            (sort)="onSortChange($event)"
+        >
+        </app-listing>
+    </div>
+</ng-container>

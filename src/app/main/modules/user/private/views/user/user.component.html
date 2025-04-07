@@ -1,0 +1,154 @@
+<div
+    *ngIf="!isLoading"
+    class="px-2"
+>
+    <div>
+        <app-breadcrumb [items]="breadcrumbItems"></app-breadcrumb>
+    </div>
+    <p-panel>
+        <ng-template #header>
+            <h2 class="text-2xl text-(--p-panel-header-color)">
+                {{ user && user.id ? "Editar cliente" : "Criar cliente" }}
+            </h2>
+        </ng-template>
+
+        <form
+            [formGroup]="userForm"
+            (submit)="save()"
+        >
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
+                <!-- Dados cliente -->
+                <p-panel class="shadow">
+                    <ng-template #header>
+                        <h3 class="text-xl">Dados usuário</h3>
+                    </ng-template>
+
+                    <div class="grid grid-cols-2 gap-2">
+                        <div class="flex flex-col gap-1">
+                            <label for="first_name">Nome<span class="text-[#dc2626]">*</span></label>
+                            <input
+                                type="text"
+                                id="first_name"
+                                pInputText
+                                formControlName="first_name"
+                                [ngClass]="{
+                                    'ng-invalid ng-dirty':
+                                        userForm.get('first_name')?.touched && userForm.get('first_name')?.invalid
+                                }"
+                            />
+                            <div
+                                *ngIf="userForm.get('first_name')?.touched && userForm.get('first_name')?.invalid"
+                                class="text-[#dc2626]"
+                            >
+                                <small>Nome é obrigatório.</small>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-col gap-1">
+                            <label for="last_name">Sobrenome<span class="text-[#dc2626]">*</span></label>
+                            <input
+                                type="text"
+                                id="last_name"
+                                pInputText
+                                formControlName="last_name"
+                                [ngClass]="{
+                                    'ng-invalid ng-dirty':
+                                        userForm.get('last_name')?.touched && userForm.get('last_name')?.invalid
+                                }"
+                            />
+                            <div
+                                *ngIf="userForm.get('last_name')?.touched && userForm.get('last_name')?.invalid"
+                                class="text-[#dc2626]"
+                            >
+                                <small>Sobrenome é obrigatório.</small>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-col gap-1">
+                            <label for="username">Username<span class="text-[#dc2626]">*</span></label>
+                            <input
+                                type="text"
+                                id="username"
+                                pInputText
+                                formControlName="username"
+                                [ngClass]="{
+                                    'ng-invalid ng-dirty':
+                                        userForm.get('username')?.touched && userForm.get('username')?.invalid
+                                }"
+                            />
+                            <div
+                                *ngIf="userForm.get('username')?.touched && userForm.get('username')?.invalid"
+                                class="text-[#dc2626]"
+                            >
+                                <small>Username é obrigatório.</small>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-col gap-1">
+                            <label for="password">Senha</label>
+                            <p-password
+                                id="password"
+                                formControlName="password"
+                                [feedback]="false"
+                                [toggleMask]="true"
+                                fluid
+                            />
+                            <div
+                                *ngIf="userForm.get('last_name')?.touched && userForm.get('last_name')?.invalid"
+                                class="text-[#dc2626]"
+                            >
+                                <small>Sobrenome é obrigatório.</small>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-col gap-1">
+                            <label for="estado">Role<span class="text-[#dc2626]">*</span></label>
+                            <p-select
+                                formControlName="role"
+                                [options]="rolesConverted"
+                                optionLabel="value"
+                                optionValue="name"
+                                placeholder="Selecionar o estado"
+                                [ngClass]="{
+                                    'ng-invalid ng-dirty':
+                                        userForm.get('role')?.touched && userForm.get('role')?.invalid
+                                }"
+                            />
+
+                            <div
+                                *ngIf="userForm.get('role')?.touched && userForm.get('role')?.invalid"
+                                class="text-[#dc2626]"
+                            >
+                                <small>Role é obrigatório.</small>
+                            </div>
+                        </div>
+                    </div>
+                </p-panel>
+                <!-- end Dados cliente -->
+            </div>
+
+            <div class="flex justify-between">
+                <button
+                    type="button"
+                    pButton
+                    severity="danger"
+                    (click)="cancelar()"
+                >
+                    <span>Cancelar</span>
+                    <i class="pi pi-times"></i>
+                </button>
+                <button
+                    type="submit"
+                    pButton
+                    [disabled]="userForm.touched && userForm.invalid"
+                >
+                    <span>Salvar</span>
+                    <i
+                        class="pi"
+                        [ngClass]="{ 'pi-user-plus': !user, 'pi-user-edit': user }"
+                    ></i>
+                </button>
+            </div>
+        </form>
+    </p-panel>
+</div>

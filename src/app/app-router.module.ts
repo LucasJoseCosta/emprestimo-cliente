@@ -30,6 +30,12 @@ import { AuthGuard } from './@core/helpers';
                 loadChildren: () => import('./main/modules/loans/private/loans.module').then((m) => m.LoansModule),
                 canActivate: [AuthGuard],
             },
+            // Loans module
+            {
+                path: 'usuarios',
+                loadChildren: () => import('./main/modules/user/private/user.module').then((m) => m.UserModule),
+                canActivate: [AuthGuard],
+            },
             // Gerais
             {
                 path: '',
